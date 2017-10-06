@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.darkkatroms.weather.activities;
+package net.darkkatrom.dkweather.activities;
 
 import android.app.Fragment;
 import android.content.ContentResolver;
@@ -47,13 +47,13 @@ import android.widget.Toast;
 import com.android.internal.util.darkkat.DetailedWeatherColorHelper;
 import com.android.internal.util.darkkat.ThemeHelper;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.WeatherInfo;
-import net.darkkatroms.weather.WeatherService;
-import net.darkkatroms.weather.fragments.CurrentWeatherFragment;
-import net.darkkatroms.weather.fragments.ForecastWeatherFragment;
-import net.darkkatroms.weather.fragments.SettingsFragment;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.WeatherInfo;
+import net.darkkatrom.dkweather.WeatherService;
+import net.darkkatrom.dkweather.fragments.CurrentWeatherFragment;
+import net.darkkatrom.dkweather.fragments.ForecastWeatherFragment;
+import net.darkkatrom.dkweather.fragments.SettingsFragment;
+import net.darkkatrom.dkweather.utils.Config;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements
     private static final String TAG = "MainActivity";
 
     private static final Uri WEATHER_URI =
-            Uri.parse("content://net.darkkatroms.weather.provider/weather");
+            Uri.parse("content://net.darkkatrom.dkweather.provider/weather");
 
     public static final String KEY_DAY_INDEX = "day_index";
     public static final String KEY_START_FRAGMENT = "start_fragment";

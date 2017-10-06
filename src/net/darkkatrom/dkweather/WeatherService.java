@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather;
+package net.darkkatrom.dkweather;
 
 import java.util.Date;
 
@@ -41,23 +41,23 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import net.darkkatroms.weather.providers.AbstractWeatherProvider;
-import net.darkkatroms.weather.providers.WeatherContentProvider;
-import net.darkkatroms.weather.utils.Config;
-import net.darkkatroms.weather.utils.NotificationUtil;
-import net.darkkatroms.weather.utils.ShortcutUtil;
+import net.darkkatrom.dkweather.providers.AbstractWeatherProvider;
+import net.darkkatrom.dkweather.providers.WeatherContentProvider;
+import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.NotificationUtil;
+import net.darkkatrom.dkweather.utils.ShortcutUtil;
 
 public class WeatherService extends Service {
     private static final String TAG = "WeatherService";
     private static final boolean DEBUG = false;
-    private static final String ACTION_UPDATE = "net.darkkatroms.weather.ACTION_UPDATE";
-    private static final String ACTION_ALARM = "net.darkkatroms.weather.ACTION_ALARM";
-    private static final String ACTION_NOTIFICATION = "net.darkkatroms.weather.ACTION_NOTIFICATION";
+    private static final String ACTION_UPDATE = "net.darkkatrom.dkweather.ACTION_UPDATE";
+    private static final String ACTION_ALARM = "net.darkkatrom.dkweather.ACTION_ALARM";
+    private static final String ACTION_NOTIFICATION = "net.darkkatrom.dkweather.ACTION_NOTIFICATION";
 
     private static final String EXTRA_FORCE = "force";
 
     static final String ACTION_CANCEL_LOCATION_UPDATE =
-            "net.darkkatroms.weather.CANCEL_LOCATION_UPDATE";
+            "net.darkkatrom.dkweather.CANCEL_LOCATION_UPDATE";
 
     private static final float LOCATION_ACCURACY_THRESHOLD_METERS = 50000;
     public static final long LOCATION_REQUEST_TIMEOUT = 5L * 60L * 1000L; // request for at most 5 minutes

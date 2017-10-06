@@ -23,8 +23,8 @@
         android:shortcutDisabledMessage="@string/shortcut_disabled_message">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetPackage="net.darkkatroms.weather"
-            android:targetClass="net.darkkatroms.weather.activities.MainActivity">
+            android:targetPackage="net.darkkatrom.dkweather"
+            android:targetClass="net.darkkatrom.dkweather.activities.MainActivity">
             <extra
                 android:name="start_fragment"
                 android:value="1" />

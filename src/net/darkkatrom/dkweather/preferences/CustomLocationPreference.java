@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather.preferences;
+package net.darkkatrom.dkweather.preferences;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,11 +33,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.WeatherInfo;
-import net.darkkatroms.weather.WeatherLocationTask;
-import net.darkkatroms.weather.WeatherService;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.WeatherInfo;
+import net.darkkatrom.dkweather.WeatherLocationTask;
+import net.darkkatrom.dkweather.WeatherService;
+import net.darkkatrom.dkweather.utils.Config;
 
 public class CustomLocationPreference extends EditTextPreference implements WeatherLocationTask.Callback {
     private AlertDialog mDialog;

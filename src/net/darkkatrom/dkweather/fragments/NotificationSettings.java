@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather.fragments;
+package net.darkkatrom.dkweather.fragments;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -22,9 +22,9 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.WeatherService;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.WeatherService;
+import net.darkkatrom.dkweather.utils.Config;
 
 public class NotificationSettings extends PreferenceFragment implements
         OnPreferenceChangeListener {

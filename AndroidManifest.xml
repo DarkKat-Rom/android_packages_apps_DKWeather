@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.darkkatroms.weather"
+    package="net.darkkatrom.dkweather"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <permission android:name="net.darkkatroms.weather.READ_WEATHER" />
+    <permission android:name="net.darkkatrom.dkweather.READ_WEATHER" />
 
     <uses-sdk
         android:minSdkVersion="23"
@@ -69,9 +69,9 @@
 
         <provider
             android:name=".providers.WeatherContentProvider"
-            android:authorities="net.darkkatroms.weather.provider"
+            android:authorities="net.darkkatrom.dkweather.provider"
             android:exported="true"
-            android:readPermission="net.darkkatroms.weather.READ_WEATHER" />
+            android:readPermission="net.darkkatrom.dkweather.READ_WEATHER" />
 
         <receiver android:name=".SystemReceiver" >
             <intent-filter>

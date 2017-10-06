@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather;
+package net.darkkatrom.dkweather;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -30,7 +30,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 class WeatherLocationListener implements LocationListener {
-    private static final String TAG = "WeatherService:WeatherLocationListener";
+    private static final String TAG = "DKWeather:WeatherLocationListener";
     private static final boolean DEBUG = true;
     private Context mContext;
     private PendingIntent mTimeoutIntent;

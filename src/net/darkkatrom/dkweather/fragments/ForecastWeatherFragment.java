@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather.fragments;
+package net.darkkatrom.dkweather.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,8 +28,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,54 +39,31 @@ import com.android.internal.util.darkkat.DetailedWeatherColorHelper;
 import com.android.internal.util.darkkat.ThemeHelper;
 import com.android.internal.util.darkkat.WeatherHelper;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.WeatherInfo;
-import net.darkkatroms.weather.WeatherInfo.HourForecast;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.WeatherInfo;
+import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
+import net.darkkatrom.dkweather.activities.MainActivity;
+import net.darkkatrom.dkweather.utils.Config;
 
 import java.util.ArrayList;
 
-public class CurrentWeatherFragment extends Fragment {
+public class ForecastWeatherFragment extends Fragment {
     private WeatherInfo mWeatherInfo;
     private LayoutInflater mInflater;
 
     private LinearLayout mCardsLayout;
     private View mCard;
 
-    private TextView mCurrent;
-    private TextView mTime;
-    private ImageView mImage;
-    private View mImageDivider;
-    private TextView mTemp;
-    private TextView mTempLowHight;
-    private View mTempDivider;
-    private TextView mCondition;
+    private TextView mDayTemps;
     private TextView[] mDayTempsValues;
-    private View mExpandedContent;
-    private TextView mPrecipitationTitle;
-    private TextView mPrecipitationValue;
-    private TextView mWindTitle;
-    private TextView mWindValue;
-    private TextView mSunriseTitle;
-    private TextView mSunriseValue;
-    private TextView mHumidityTitle;
-    private TextView mHumidityValue;
-    private TextView mPressureTitle;
-    private TextView mPressureValue;
-    private TextView mSunsetTitle;
-    private TextView mSunsetValue;
-
-    private View mExpandCollapseButtonDivider;
+    private TextView mMinValue;
+    private TextView mMaxValue;
     private TextView mProviderLink;
-    private LinearLayout mExpandCollapseButton;
-    private TextView mExpandCollapseButtonText;
-    private ImageView mExpandCollapseButtonIcon;
+
+    private String mForecastDay;
+    private int mDayForecastIndex = 1;
 
     private ArrayList<ViewHolder> mHolders = new ArrayList<ViewHolder>();
-
-    private ValueAnimator mAnimator;
-    private int mExpandedContentHeight = 0;
-    private boolean mAnimateExpansion = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,62 +77,29 @@ public class CurrentWeatherFragment extends Fragment {
         mWeatherInfo = Config.getWeatherData(getActivity());
         mInflater = inflater;
 
-        View layout = mInflater.inflate(R.layout.detailed_weather_current, container, false);
-        mCardsLayout = (LinearLayout) layout.findViewById(R.id.current_cards_layout);
-        mCard = layout.findViewById(R.id.current_card);
+        View layout = mInflater.inflate(R.layout.detailed_weather_forecast, container, false);
+        mCardsLayout = (LinearLayout) layout.findViewById(R.id.forecast_cards_layout);
+        mCard = layout.findViewById(R.id.forecast_daytemps_card);
 
-        mCurrent = (TextView) layout.findViewById(R.id.current_weather);
-        mTime = (TextView) layout.findViewById(R.id.current_time);
-        mImage = (ImageView) layout.findViewById(R.id.current_condition_image);
-        mImageDivider = layout.findViewById(R.id.current_image_divider);
-        mTemp = (TextView) layout.findViewById(R.id.current_temp);
-        mTempDivider = layout.findViewById(R.id.current_temp_divider);
-        mTempLowHight = (TextView) layout.findViewById(R.id.current_low_high);
-        mCondition = (TextView) layout.findViewById(R.id.current_condition);
+        mDayTemps = (TextView) layout.findViewById(R.id.forecast_daytemps);
         TextView[] dayTempsTitles = {
-            (TextView) layout.findViewById(R.id.current_temp_morning_title),
-            (TextView) layout.findViewById(R.id.current_temp_day_title),
-            (TextView) layout.findViewById(R.id.current_temp_evening_title),
-            (TextView) layout.findViewById(R.id.current_temp_night_title)
+            (TextView) layout.findViewById(R.id.forecast_weather_temp_morning_title),
+            (TextView) layout.findViewById(R.id.forecast_weather_temp_day_title),
+            (TextView) layout.findViewById(R.id.forecast_weather_temp_evening_title),
+            (TextView) layout.findViewById(R.id.forecast_weather_temp_night_title)
         };
         mDayTempsValues = new TextView[] {
-                (TextView) layout.findViewById(R.id.current_temp_morning_value),
-                (TextView) layout.findViewById(R.id.current_temp_day_value),
-                (TextView) layout.findViewById(R.id.current_temp_evening_value),
-                (TextView) layout.findViewById(R.id.current_temp_night_value)
+                (TextView) layout.findViewById(R.id.forecast_weather_temp_morning_value),
+                (TextView) layout.findViewById(R.id.forecast_weather_temp_day_value),
+                (TextView) layout.findViewById(R.id.forecast_weather_temp_evening_value),
+                (TextView) layout.findViewById(R.id.forecast_weather_temp_night_value)
         };
-        mExpandedContent = layout.findViewById(R.id.current_expanded_content_layout);
-        mPrecipitationTitle = (TextView) layout.findViewById(R.id.current_precipitation_title);
-        mPrecipitationValue = (TextView) layout.findViewById(R.id.current_precipitation_value);
-        mWindTitle = (TextView) layout.findViewById(R.id.current_wind_title);
-        mWindValue = (TextView) layout.findViewById(R.id.current_wind_value);
-        mSunriseTitle = (TextView) layout.findViewById(R.id.current_sunrise_title);
-        mSunriseValue = (TextView) layout.findViewById(R.id.current_sunrise_value);
-        mHumidityTitle = (TextView) layout.findViewById(R.id.current_humidity_title);
-        mHumidityValue = (TextView) layout.findViewById(R.id.current_humidity_value);
-        mPressureTitle = (TextView) layout.findViewById(R.id.current_pressure_title);
-        mPressureValue = (TextView) layout.findViewById(R.id.current_pressure_value);
-        mSunsetTitle = (TextView) layout.findViewById(R.id.current_sunset_title);
-        mSunsetValue = (TextView) layout.findViewById(R.id.current_sunset_value);
-        mExpandCollapseButtonDivider = 
-                layout.findViewById(R.id.current_expand_collapse_button_divider);
+        TextView minTitle = (TextView) layout.findViewById(R.id.forecast_weather_min_title);
+        mMinValue = (TextView) layout.findViewById(R.id.forecast_weather_min_value);
+        TextView maxTitle = (TextView) layout.findViewById(R.id.forecast_weather_max_title);
+        mMaxValue = (TextView) layout.findViewById(R.id.forecast_weather_max_value);
         mProviderLink = 
-                (TextView) layout.findViewById(R.id.current_provider_link);
-        mExpandCollapseButton = 
-                (LinearLayout) layout.findViewById(R.id.current_expand_collapse_button);
-        mExpandCollapseButtonText = 
-                (TextView) layout.findViewById(R.id.current_expand_collapse_button_text);
-        mExpandCollapseButtonIcon = 
-                (ImageView) layout.findViewById(R.id.current_expand_collapse_button_icon);
-
-        mExpandedContent.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mExpandedContentHeight = mExpandedContent.getHeight();
-                mExpandedContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mExpandedContent.setVisibility(View.GONE);
-            }
-        });
+                (TextView) layout.findViewById(R.id.forecast_daytemps_provider_link);
 
         mProviderLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,123 +112,72 @@ public class CurrentWeatherFragment extends Fragment {
                 }
             }
         });
-        mExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mAnimator != null) {
-                    mAnimator.start();
-                }
-            }
-        });
 
         final boolean customizeColors = !ThemeHelper.detailedWeatherUseThemeColors(getActivity());
-        final int conditionImageColor = DetailedWeatherColorHelper.getConditionImageColor(getActivity());
         if (customizeColors) {
             final int accentColor = DetailedWeatherColorHelper.getWeatherAccentColor(getActivity());
             final int backgroundColor = DetailedWeatherColorHelper.getContentBgColor(getActivity());
             final int cardBackgroundColor = DetailedWeatherColorHelper.getCardBgColor(getActivity());
             final int textColorPrimary = DetailedWeatherColorHelper.getCardPrimaryTextColor(getActivity());
             final int textColorSecondary = DetailedWeatherColorHelper.getCardSecondaryTextColor(getActivity());
-            final int iconColor = DetailedWeatherColorHelper.getCardIconColor(getActivity());
-            final int dividerAlpha = DetailedWeatherColorHelper.getDividerAlpha(getActivity());
-            final int dividerColor = (dividerAlpha << 24) | (iconColor & 0x00ffffff);
             final int rippleColor = DetailedWeatherColorHelper.getCardRippleColor(getActivity());
-
             layout.setBackgroundColor(backgroundColor);
             mCard.setBackgroundTintList(ColorStateList.valueOf(cardBackgroundColor));
-
-            mCurrent.setTextColor(textColorPrimary);
-            mTime.setTextColor(textColorSecondary);
-            if (conditionImageColor != 0) {
-                mImage.setImageTintList(ColorStateList.valueOf(conditionImageColor));
-            } else {
-                mImage.setImageTintList(null);
-            }
-
-            mImageDivider.setBackgroundColor(dividerColor);
-            mTemp.setTextColor(textColorPrimary);
-            mTempDivider.setBackgroundColor(dividerColor);
-            mTempLowHight.setTextColor(textColorSecondary);
-            mCondition.setTextColor(textColorPrimary);
-
+            mDayTemps.setTextColor(textColorPrimary);
             for (int i = 0; i < mDayTempsValues.length; i++) {
                 dayTempsTitles[i].setTextColor(textColorPrimary);
                 mDayTempsValues[i].setTextColor(textColorSecondary);
             }
-
             mProviderLink.setTextColor(accentColor);
-            mPrecipitationTitle.setTextColor(textColorPrimary);
-            mPrecipitationValue.setTextColor(textColorSecondary);
-            mWindTitle.setTextColor(textColorPrimary);
-            mWindValue.setTextColor(textColorSecondary);
-            mSunriseTitle.setTextColor(textColorPrimary);
-            mSunriseValue.setTextColor(textColorSecondary);
-            mHumidityTitle.setTextColor(textColorPrimary);
-            mHumidityValue.setTextColor(textColorSecondary);
-            mPressureTitle.setTextColor(textColorPrimary);
-            mPressureValue.setTextColor(textColorSecondary);
-            mSunsetTitle.setTextColor(textColorPrimary);
-            mSunsetValue.setTextColor(textColorSecondary);
-            mExpandCollapseButtonDivider.setBackgroundColor(dividerColor);
+            minTitle.setTextColor(textColorPrimary);
+            mMinValue.setTextColor(textColorSecondary);
+            maxTitle.setTextColor(textColorPrimary);
+            mMaxValue.setTextColor(textColorSecondary);
             ((RippleDrawable) mProviderLink.getBackground())
                     .setColor(ColorStateList.valueOf(rippleColor));
-            ((RippleDrawable) mExpandCollapseButton.getBackground())
-                    .setColor(ColorStateList.valueOf(rippleColor));
-            mExpandCollapseButtonText.setTextColor(textColorPrimary);
-            mExpandCollapseButtonIcon.setImageTintList(ColorStateList.valueOf(iconColor));
-        } else {
-            if (conditionImageColor == 0) {
-                mImage.setImageTintList(null);
-            }
         }
 
-        if (mWeatherInfo != null) {
-            Drawable icon = mWeatherInfo.getConditionIcon(
-                    WeatherHelper.getDetailedWeatherConditionIconType(getActivity()),
-                    mWeatherInfo.getConditionCode());
-            final String[] tempValues = {
-                mWeatherInfo.getForecasts().get(0).getFormattedMorning(),
-                mWeatherInfo.getForecasts().get(0).getFormattedDay(),
-                mWeatherInfo.getForecasts().get(0).getFormattedEvening(),
-                mWeatherInfo.getForecasts().get(0).getFormattedNight()
-            };
+        if (savedInstanceState != null) {
+            mForecastDay = savedInstanceState.getString(MainActivity.KEY_DAY_INDEX);
+        }
 
-            mTime.setText(mWeatherInfo.getTime());
-            mImage.setImageDrawable(icon);
-            mTemp.setText(mWeatherInfo.getFormattedTemperature());
-            mTempLowHight.setText(mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh());
-            mCondition.setText(mWeatherInfo.getCondition());
-            for (int i = 0; i < mDayTempsValues.length; i++) {
-                mDayTempsValues[i].setText(tempValues[i]);
-            }
-            setPrecipitation(mWeatherInfo);
-            mWindValue.setText(mWeatherInfo.getFormattedWind());
-            mSunriseValue.setText(mWeatherInfo.getSunrise());
-            mHumidityValue.setText(mWeatherInfo.getFormattedHumidity());
-            mPressureValue.setText(mWeatherInfo.getFormattedPressure());
-            mSunsetValue.setText(mWeatherInfo.getSunset());
-
-            if (mCardsLayout != null) {
-                ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(getForecastDay());
-                if (hourForecasts.size() != 0) {
-                    for (int i = 0; i < hourForecasts.size(); i++) {
-                        HourForecast h = hourForecasts.get(i);
-                        ViewHolder holder = new ViewHolder(mInflater);
-                        holder.setColors(customizeColors);
-                        holder.updateWeather(h);
-                        mHolders.add(holder);
-                        mCardsLayout.addView(holder.getForecastCard());
-                    }
+        if (mWeatherInfo != null && mCardsLayout != null && mForecastDay != null) {
+            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(mForecastDay);
+            if (hourForecasts.size() != 0) {
+                final String[] tempValues = {
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedMorning(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedDay(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedEvening(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedNight()
+                };
+                for (int i = 0; i < mDayTempsValues.length; i++) {
+                    mDayTempsValues[i].setText(tempValues[i]);
+                }
+                final String min =
+                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedLow();
+                final String max =
+                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedHigh();
+                mMinValue.setText(min);
+                mMaxValue.setText(max);
+                for (int i = 0; i < hourForecasts.size(); i++) {
+                    HourForecast h = hourForecasts.get(i);
+                    ViewHolder holder = new ViewHolder(mInflater);
+                    holder.setColors(customizeColors);
+                    holder.updateWeather(h);
+                    mHolders.add(holder);
+                    mCardsLayout.addView(holder.getForecastCard());
                 }
             }
         }
-        mAnimator = createAnimator();
-
         return layout;
     }
 
-    private String getForecastDay() {
-        return mWeatherInfo.getHourForecastDays().get(0);
+    public void setForecastDay(String forecastDay) {
+        mForecastDay = forecastDay;
+    }
+
+    public void setDayForecastIndex(int index) {
+        mDayForecastIndex = index;
     }
 
     public void updateWeather(WeatherInfo weather) {
@@ -293,34 +186,24 @@ public class CurrentWeatherFragment extends Fragment {
         }
         mWeatherInfo = weather;
 
-        Drawable icon = mWeatherInfo.getConditionIcon(
-                WeatherHelper.getDetailedWeatherConditionIconType(getActivity()),
-                mWeatherInfo.getConditionCode());
-        final String[] tempValues = {
-            mWeatherInfo.getForecasts().get(0).getFormattedMorning(),
-            mWeatherInfo.getForecasts().get(0).getFormattedDay(),
-            mWeatherInfo.getForecasts().get(0).getFormattedEvening(),
-            mWeatherInfo.getForecasts().get(0).getFormattedNight()
-        };
-
-        mTime.setText(mWeatherInfo.getTime());
-        mImage.setImageDrawable(icon);
-        mTemp.setText(mWeatherInfo.getFormattedTemperature());
-        mTempLowHight.setText(mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh());
-        mCondition.setText(mWeatherInfo.getCondition());
-        for (int i = 0; i < mDayTempsValues.length; i++) {
-            mDayTempsValues[i].setText(tempValues[i]);
-        }
-        setPrecipitation(mWeatherInfo);
-        mWindValue.setText(mWeatherInfo.getFormattedWind());
-        mSunriseValue.setText(mWeatherInfo.getSunrise());
-        mHumidityValue.setText(mWeatherInfo.getFormattedHumidity());
-        mPressureValue.setText(mWeatherInfo.getFormattedPressure());
-        mSunsetValue.setText(mWeatherInfo.getSunset());
-
-        if (mCardsLayout != null) {
-            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(getForecastDay());
+        if (mCardsLayout != null && mForecastDay != null) {
+            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(mForecastDay);
             if (hourForecasts.size() != 0) {
+                final String[] tempValues = {
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedMorning(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedDay(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedEvening(),
+                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedNight()
+                };
+                for (int i = 0; i < mDayTempsValues.length; i++) {
+                    mDayTempsValues[i].setText(tempValues[i]);
+                }
+                final String min =
+                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedLow();
+                final String max =
+                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedHigh();
+                mMinValue.setText(min);
+                mMaxValue.setText(max);
                 if (mHolders.size() != hourForecasts.size()) {
                     final boolean customizeColors =
                             !ThemeHelper.detailedWeatherUseThemeColors(getActivity());
@@ -342,77 +225,6 @@ public class CurrentWeatherFragment extends Fragment {
                     }
                 }
             }
-        }
-    }
-
-    private  ValueAnimator createAnimator() {
-        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-        animator.setInterpolator(new FastOutSlowInInterpolator());
-        animator.setDuration(300);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float value = animation.getAnimatedFraction();
-                float height;
-                float alpha = value;
-                if (mAnimateExpansion) {
-                    height = mExpandedContentHeight * value;
-                    
-                } else {
-                    height = mExpandedContentHeight * (1 - value);
-                    alpha = 1 - value;
-                }
-                mExpandedContent.getLayoutParams().height = Math.round(height);
-                mExpandCollapseButtonDivider.setAlpha(alpha);
-                mExpandedContent.requestLayout();
-            }
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if (mAnimateExpansion) {
-                    mExpandedContent.setVisibility(View.VISIBLE);
-                    mExpandCollapseButtonDivider.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (mAnimateExpansion) {
-                    mExpandCollapseButtonIcon.setImageResource(R.drawable.ic_expand_less);
-                    mExpandCollapseButtonText.setText(R.string.collapse_card);
-                } else {
-                    mExpandCollapseButtonIcon.setImageResource(R.drawable.ic_expand_more);
-                    mExpandCollapseButtonText.setText(R.string.expand_card);
-                    mExpandedContent.setVisibility(View.GONE);
-                    mExpandCollapseButtonDivider.setVisibility(View.GONE);
-                }
-                mAnimateExpansion = !mAnimateExpansion;
-            }
-        });
-        return animator;
-    }
-
-    private void setPrecipitation(WeatherInfo w) {
-        if (getActivity() == null) {
-            return;
-        }
-        final String rain1H = w.getFormattedRain1H();
-        final String rain3H = w.getFormattedRain3H();
-        final String snow1H = w.getFormattedSnow1H();
-        final String snow3H = w.getFormattedSnow3H();
-        final String noValue = getActivity().getResources().getString(R.string.no_precipitation_value);
-        if (!snow1H.equals(WeatherInfo.NO_VALUE)) {
-            mPrecipitationValue.setText(snow1H);
-        } else if (!snow3H.equals(WeatherInfo.NO_VALUE)) {
-            mPrecipitationValue.setText(snow3H);
-        } else if (!rain1H.equals(WeatherInfo.NO_VALUE)) {
-            mPrecipitationValue.setText(rain1H);
-        } else if (!rain3H.equals(WeatherInfo.NO_VALUE)) {
-            mPrecipitationValue.setText(rain3H);
-        } else {
-            mPrecipitationValue.setText(noValue);
         }
     }
 
@@ -510,8 +322,8 @@ public class CurrentWeatherFragment extends Fragment {
                 final int rippleColor = DetailedWeatherColorHelper.getCardRippleColor(getActivity());
 
                 card.setBackgroundTintList(ColorStateList.valueOf(cardBackgroundColor));
-                timeValue.setTextColor(textColorPrimary);
                 forecast.setTextColor(textColorPrimary);
+                timeValue.setTextColor(textColorSecondary);
 
                 if (conditionImageColor != 0) {
                     image.setImageTintList(ColorStateList.valueOf(conditionImageColor));
@@ -620,5 +432,11 @@ public class CurrentWeatherFragment extends Fragment {
             humidityValue.setText(h.getFormattedHumidity());
             pressureValue.setText(h.getFormattedPressure());
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(MainActivity.KEY_DAY_INDEX, mForecastDay);
+        super.onSaveInstanceState(outState);
     }
 }

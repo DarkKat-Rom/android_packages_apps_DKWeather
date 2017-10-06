@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather.utils;
+package net.darkkatrom.dkweather.utils;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,9 +23,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
-import net.darkkatroms.weather.providers.AbstractWeatherProvider;
-import net.darkkatroms.weather.providers.OpenWeatherMapProvider;
-import net.darkkatroms.weather.WeatherInfo;
+import net.darkkatrom.dkweather.providers.AbstractWeatherProvider;
+import net.darkkatrom.dkweather.providers.OpenWeatherMapProvider;
+import net.darkkatrom.dkweather.WeatherInfo;
 
 public class Config {
     public static final String PREF_KEY_ENABLE                 = "enable";
@@ -142,7 +142,7 @@ public class Config {
 
     public static boolean getShowSettingsShortcut(Context context) {
         PackageManager pm = context.getPackageManager();
-        ComponentName cn = new ComponentName(context, "net.darkkatroms.weather.LauncherActivity");
+        ComponentName cn = new ComponentName(context, "net.darkkatrom.dkweather.LauncherActivity");
         int componentEnabledSetting = pm.getComponentEnabledSetting(cn);
         boolean isEnabled = componentEnabledSetting == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
         return isEnabled;
@@ -153,7 +153,7 @@ public class Config {
             return;
         }
         PackageManager pm = context.getPackageManager();
-        ComponentName cn = new ComponentName(context, "net.darkkatroms.weather.LauncherActivity");
+        ComponentName cn = new ComponentName(context, "net.darkkatrom.dkweather.LauncherActivity");
         int componentEnabledSetting = enabled
                 ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                 : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;

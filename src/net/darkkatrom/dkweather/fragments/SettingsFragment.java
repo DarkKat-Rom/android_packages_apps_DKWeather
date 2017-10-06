@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather.fragments;
+package net.darkkatrom.dkweather.fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -35,12 +35,12 @@ import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.WeatherLocationTask;
-import net.darkkatroms.weather.WeatherService;
-import net.darkkatroms.weather.WeatherInfo;
-import net.darkkatroms.weather.preferences.CustomLocationPreference;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.WeatherLocationTask;
+import net.darkkatrom.dkweather.WeatherService;
+import net.darkkatrom.dkweather.WeatherInfo;
+import net.darkkatrom.dkweather.preferences.CustomLocationPreference;
+import net.darkkatrom.dkweather.utils.Config;
 
 public class SettingsFragment extends PreferenceFragment implements
         OnPreferenceChangeListener, WeatherLocationTask.Callback  {

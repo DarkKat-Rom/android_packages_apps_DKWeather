@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.darkkatroms.weather.utils;
+package net.darkkatrom.dkweather.utils;
 
 import android.content.Context;
 import android.content.pm.ShortcutInfo;
@@ -23,8 +23,8 @@ import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.activities.MainActivity;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.activities.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
