@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather;
+package net.darkkatrom.dkweather;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,10 +23,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.utils.Config;
 
 public class SystemReceiver extends BroadcastReceiver {
-    private static final String TAG = "WeatherService:SystemReceiver";
+    private static final String TAG = "DKWeather:SystemReceiver";
     private static final boolean DEBUG = false;
 
     @Override

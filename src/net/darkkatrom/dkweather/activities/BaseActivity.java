@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.darkkatroms.weather.activities;
+package net.darkkatrom.dkweather.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -32,7 +32,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.darkkatroms.weather.R;
+import net.darkkatrom.dkweather.R;
 
 public class BaseActivity extends Activity implements
         PreferenceFragment.OnPreferenceStartFragmentCallback {

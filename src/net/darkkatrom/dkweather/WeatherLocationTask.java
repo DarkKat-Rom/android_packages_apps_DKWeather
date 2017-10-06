@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather;
+package net.darkkatrom.dkweather;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +34,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.utils.Config;
 
 public class WeatherLocationTask extends AsyncTask<Void, Void, List<WeatherInfo.WeatherLocation>> {
     private ProgressDialog mProgressDialog;

@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather.providers;
+package net.darkkatrom.dkweather.providers;
 
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
-import net.darkkatroms.weather.WeatherInfo;
+import net.darkkatrom.dkweather.WeatherInfo;
 
 import java.io.IOException;
 import java.util.List;

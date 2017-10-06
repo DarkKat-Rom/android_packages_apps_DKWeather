@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather.activities;
+package net.darkkatrom.dkweather.activities;
 
-import net.darkkatroms.weather.R;
+import net.darkkatrom.dkweather.R;
 
 public class SettingsActivity extends AppSettingsActivity {
 

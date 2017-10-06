@@ -25,7 +25,7 @@
     <PreferenceScreen
         android:key="notification"
         android:title="@string/notification_title"
-        android:fragment="net.darkkatroms.weather.fragments.NotificationSettings"
+        android:fragment="net.darkkatrom.dkweather.fragments.NotificationSettings"
         android:dependency="enable" />
 
     <ListPreference
@@ -54,7 +54,7 @@
         android:defaultValue="false"
         android:dependency="enable" />
 
-    <net.darkkatroms.weather.preferences.CustomLocationPreference
+    <net.darkkatrom.dkweather.preferences.CustomLocationPreference
         android:key="weather_custom_location_city"
         android:title="@string/weather_custom_location_title"
         android:dialogTitle="@string/weather_custom_location_dialog_title"

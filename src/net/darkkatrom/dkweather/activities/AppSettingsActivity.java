@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package net.darkkatroms.weather.activities;
+package net.darkkatrom.dkweather.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -25,9 +25,9 @@ import android.preference.PreferenceFragment;
 import android.os.Bundle;
 import android.widget.Toolbar;
 
-import net.darkkatroms.weather.R;
-import net.darkkatroms.weather.fragments.NotificationSettings;
-import net.darkkatroms.weather.fragments.SettingsFragment;
+import net.darkkatrom.dkweather.R;
+import net.darkkatrom.dkweather.fragments.NotificationSettings;
+import net.darkkatrom.dkweather.fragments.SettingsFragment;
 
 public class AppSettingsActivity extends Activity implements
         PreferenceFragment.OnPreferenceStartFragmentCallback {

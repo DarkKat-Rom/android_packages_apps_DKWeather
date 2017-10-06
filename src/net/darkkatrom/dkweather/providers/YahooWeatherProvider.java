@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatroms.weather.providers;
+package net.darkkatrom.dkweather.providers;
 
 import android.content.Context;
 import android.location.Address;
@@ -25,10 +25,10 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 
-import net.darkkatroms.weather.WeatherInfo;
-import net.darkkatroms.weather.WeatherInfo.DayForecast;
-import net.darkkatroms.weather.WeatherInfo.HourForecast;
-import net.darkkatroms.weather.utils.Config;
+import net.darkkatrom.dkweather.WeatherInfo;
+import net.darkkatrom.dkweather.WeatherInfo.DayForecast;
+import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
+import net.darkkatrom.dkweather.utils.Config;
 
 import java.io.IOException;
 import java.io.StringReader;

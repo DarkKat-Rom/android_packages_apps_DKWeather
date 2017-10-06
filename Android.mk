@@ -38,7 +38,7 @@ LOCAL_AAPT_FLAGS := --auto-add-overlay \
     --extra-packages android.support.design \
     --extra-packages android.support.v7.appcompat:android.support.v7.preference:android.support.v7.recyclerview
 
-LOCAL_PACKAGE_NAME := DKWeatherService
+LOCAL_PACKAGE_NAME := DKWeather
 
 LOCAL_MODULE_TAGS := optional
 

@@ -16,7 +16,7 @@
 <resources>
 
     <!-- General -->
-	<string name="app_name">DK Wetter Dienst</string>
+	<string name="app_name">DarkKat Wetter</string>
     <string name="weather_title">Wetter</string>
 
     <!-- Navigation drawer -->
