@@ -18,6 +18,7 @@
     <!-- General -->
     <string name="app_name">DarkKat Weather</string>
     <string name="weather_title">Weather</string>
+    <string name="weather_not_available_title">Weather data not available</string>
 
     <!-- Navigation drawer -->
     <string name="menu_item_weather_today_title">Today</string>

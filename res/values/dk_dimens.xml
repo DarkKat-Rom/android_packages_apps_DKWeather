@@ -19,12 +19,12 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="toolbar_update_button_size">48dp</dimen>
 
-    <!-- Navigation view -->
-    <dimen name="nav_view_height">192dp</dimen>
-    <dimen name="nav_view_padding">16dp</dimen>
+    <!-- Navigation view header -->
+    <dimen name="nav_view_header_height">158dp</dimen>
+    <dimen name="nav_view_header_keyline_padding">16dp</dimen>
+    <dimen name="nav_view_header_padding_bottom">8dp</dimen>
+    <dimen name="nav_view_header_text_layout_height">56dp</dimen>
     <dimen name="nav_view_header_icon_size">64dp</dimen>
-    <dimen name="nav_view_header_icon_top_margin">24dp</dimen>
-    <dimen name="nav_view_header_icon_padding">2dp</dimen>
 
     <!-- Detailed weather -->
     <dimen name="detailed_weather_fading_edge_length">12dp</dimen>

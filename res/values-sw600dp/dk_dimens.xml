@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 DarkKat
+<!-- Copyright (C) 2017 DarkKat
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
 -->
 <resources>
 
-    <string name="weather_not_available_subtitle" translatable="false">--</string>
-    <string name="no_value" translatable="false">-</string>
-    <string name="notification_text_icon_font_family" translatable="false">sans-serif</string>
-
-    <!-- CyanogenMod additions -->
-
-    <!-- Forecast unavailable -->
-    <string name="weather_3200" translatable="false"></string>
+    <!-- Navigation view header -->
+    <dimen name="nav_view_header_height">180dp</dimen>
+    <dimen name="nav_view_header_keyline_padding">24dp</dimen>
 </resources>

@@ -43,6 +43,7 @@ import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.internal.util.darkkat.DetailedWeatherColorHelper;
 import com.android.internal.util.darkkat.ThemeHelper;
@@ -194,6 +195,13 @@ public class MainActivity extends BaseActivity implements
                 ImageView headerIcon = (ImageView) headerView.findViewById(R.id.nav_view_header_icon);
                 Drawable icon = mWeatherInfo.getConditionIcon(0, mWeatherInfo.getConditionCode()).mutate();
                 headerIcon.setImageDrawable(icon);
+
+                TextView title = (TextView) headerView.findViewById(R.id.nav_view_header_title);
+                TextView subtitle = (TextView) headerView.findViewById(R.id.nav_view_header_subtitle);
+                String titleText = mWeatherInfo.getCondition() + ", " + mWeatherInfo.getFormattedTemperature();
+                String subtitleText = mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh();
+                title.setText(titleText);
+                subtitle.setText(subtitleText);
             }
 
             if (savedInstanceState == null) {
@@ -298,6 +306,13 @@ public class MainActivity extends BaseActivity implements
             ImageView headerIcon = (ImageView) headerView.findViewById(R.id.nav_view_header_icon);
             Drawable icon = mWeatherInfo.getConditionIcon(0, mWeatherInfo.getConditionCode()).mutate();
             headerIcon.setImageDrawable(icon);
+
+            TextView title = (TextView) headerView.findViewById(R.id.nav_view_header_title);
+            TextView subtitle = (TextView) headerView.findViewById(R.id.nav_view_header_subtitle);
+            String titleText = mWeatherInfo.getCondition() + ", " + mWeatherInfo.getFormattedTemperature();
+            String subtitleText = mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh();
+            title.setText(titleText);
+            subtitle.setText(subtitleText);
         }
 
         if (mSelectedMenuItemIndex != MENU_ITEM_INDEX_SETTINGS) {
