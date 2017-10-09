@@ -36,7 +36,7 @@
         <item name="android:textColor">@color/toolbar_text_color</item>
     </style>
 
-    <style name="ToolbarSubtitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="ToolbarSubtitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textColor">@color/toolbar_sub_text_color</item>
     </style>
 </resources>
