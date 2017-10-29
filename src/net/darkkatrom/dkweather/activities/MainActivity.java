@@ -17,11 +17,9 @@ package net.darkkatrom.dkweather.activities;
 
 import android.app.Fragment;
 import android.content.ContentResolver;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,9 +42,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
-
-import com.android.internal.util.darkkat.DetailedWeatherColorHelper;
-import com.android.internal.util.darkkat.ThemeHelper;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
@@ -145,15 +140,6 @@ public class MainActivity extends BaseActivity implements
         mWeatherObserver = new WeatherObserver(mHandler);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final boolean customizeColors = !ThemeHelper.detailedWeatherUseThemeColors(this);
-        if (customizeColors) {
-            final int actionBarBgColor = DetailedWeatherColorHelper.getActionBarBgColor(this);
-            final int textColorPrimary = DetailedWeatherColorHelper.getActionBarPrimaryTextColor(this);
-            final int textColorSecondary = DetailedWeatherColorHelper.getActionBarSecondaryTextColor(this);
-            toolbar.setBackgroundColor(actionBarBgColor);
-            toolbar.setTitleTextColor(textColorPrimary);
-            toolbar.setSubtitleTextColor(textColorSecondary);
-        }
 
         setSupportActionBar(toolbar);
 
@@ -331,17 +317,9 @@ public class MainActivity extends BaseActivity implements
         MenuItem itemUpdate = menu.findItem(R.id.item_update);
         LinearLayout updateButtonLayout = (LinearLayout) itemUpdate.getActionView();
         mUpdateButton = (ImageView) updateButtonLayout.findViewById(R.id.update_button);
-        final boolean customizeColors = !ThemeHelper.detailedWeatherUseThemeColors(this);
 
         updateButtonLayout.setOnClickListener(this);
         updateButtonLayout.setOnLongClickListener(this);
-        if (customizeColors) {
-            final int iconColor = DetailedWeatherColorHelper.getActionBarIconColor(this);
-            final int rippleColor = DetailedWeatherColorHelper.getActionBarRippleColor(this);
-            mUpdateButton.setImageTintList(ColorStateList.valueOf(iconColor));
-            ((RippleDrawable) updateButtonLayout.getBackground())
-                    .setColor(ColorStateList.valueOf(rippleColor));
-        }
         return true;
     }
 

@@ -20,10 +20,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
-import android.content.res.ColorStateList;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -35,8 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.internal.util.darkkat.DetailedWeatherColorHelper;
-import com.android.internal.util.darkkat.ThemeHelper;
 import com.android.internal.util.darkkat.WeatherHelper;
 
 import net.darkkatrom.dkweather.R;
@@ -113,30 +109,6 @@ public class ForecastWeatherFragment extends Fragment {
             }
         });
 
-        final boolean customizeColors = !ThemeHelper.detailedWeatherUseThemeColors(getActivity());
-        if (customizeColors) {
-            final int accentColor = DetailedWeatherColorHelper.getWeatherAccentColor(getActivity());
-            final int backgroundColor = DetailedWeatherColorHelper.getContentBgColor(getActivity());
-            final int cardBackgroundColor = DetailedWeatherColorHelper.getCardBgColor(getActivity());
-            final int textColorPrimary = DetailedWeatherColorHelper.getCardPrimaryTextColor(getActivity());
-            final int textColorSecondary = DetailedWeatherColorHelper.getCardSecondaryTextColor(getActivity());
-            final int rippleColor = DetailedWeatherColorHelper.getCardRippleColor(getActivity());
-            layout.setBackgroundColor(backgroundColor);
-            mCard.setBackgroundTintList(ColorStateList.valueOf(cardBackgroundColor));
-            mDayTemps.setTextColor(textColorPrimary);
-            for (int i = 0; i < mDayTempsValues.length; i++) {
-                dayTempsTitles[i].setTextColor(textColorPrimary);
-                mDayTempsValues[i].setTextColor(textColorSecondary);
-            }
-            mProviderLink.setTextColor(accentColor);
-            minTitle.setTextColor(textColorPrimary);
-            mMinValue.setTextColor(textColorSecondary);
-            maxTitle.setTextColor(textColorPrimary);
-            mMaxValue.setTextColor(textColorSecondary);
-            ((RippleDrawable) mProviderLink.getBackground())
-                    .setColor(ColorStateList.valueOf(rippleColor));
-        }
-
         if (savedInstanceState != null) {
             mForecastDay = savedInstanceState.getString(MainActivity.KEY_DAY_INDEX);
         }
@@ -162,7 +134,6 @@ public class ForecastWeatherFragment extends Fragment {
                 for (int i = 0; i < hourForecasts.size(); i++) {
                     HourForecast h = hourForecasts.get(i);
                     ViewHolder holder = new ViewHolder(mInflater);
-                    holder.setColors(customizeColors);
                     holder.updateWeather(h);
                     mHolders.add(holder);
                     mCardsLayout.addView(holder.getForecastCard());
@@ -205,15 +176,12 @@ public class ForecastWeatherFragment extends Fragment {
                 mMinValue.setText(min);
                 mMaxValue.setText(max);
                 if (mHolders.size() != hourForecasts.size()) {
-                    final boolean customizeColors =
-                            !ThemeHelper.detailedWeatherUseThemeColors(getActivity());
                     if (mCardsLayout.getChildCount() > 1) {
                         mCardsLayout.removeViews(1, mCardsLayout.getChildCount() - 1);
                     }
                     for (int i = 0; i < hourForecasts.size(); i++) {
                         HourForecast h = hourForecasts.get(i);
                         ViewHolder holder = new ViewHolder(mInflater);
-                        holder.setColors(customizeColors);
                         holder.updateWeather(h);
                         mHolders.add(holder);
                         mCardsLayout.addView(holder.getForecastCard());
@@ -305,52 +273,6 @@ public class ForecastWeatherFragment extends Fragment {
             });
 
             animator = createForecastAnimator();
-        }
-
-        public void setColors(boolean customizeColors) {
-            final int conditionImageColor = 
-                    DetailedWeatherColorHelper.getConditionImageColor(getActivity());
-            if (customizeColors) {
-                final int cardBackgroundColor = DetailedWeatherColorHelper.getCardBgColor(getActivity());
-                final int textColorPrimary = 
-                        DetailedWeatherColorHelper.getCardPrimaryTextColor(getActivity());
-                final int textColorSecondary = 
-                        DetailedWeatherColorHelper.getCardSecondaryTextColor(getActivity());
-                final int iconColor = DetailedWeatherColorHelper.getCardIconColor(getActivity());
-                final int dividerAlpha = DetailedWeatherColorHelper.getDividerAlpha(getActivity());
-                final int dividerColor = (dividerAlpha << 24) | (iconColor & 0x00ffffff);
-                final int rippleColor = DetailedWeatherColorHelper.getCardRippleColor(getActivity());
-
-                card.setBackgroundTintList(ColorStateList.valueOf(cardBackgroundColor));
-                forecast.setTextColor(textColorPrimary);
-                timeValue.setTextColor(textColorSecondary);
-
-                if (conditionImageColor != 0) {
-                    image.setImageTintList(ColorStateList.valueOf(conditionImageColor));
-                } else {
-                    image.setImageTintList(null);
-                }
-
-                imageDivider.setBackgroundColor(dividerColor);
-                tempValue.setTextColor(textColorPrimary);
-                tempConditionDivider.setBackgroundColor(dividerColor);
-                conditionValue.setTextColor(textColorPrimary);
-                precipitationTitle.setTextColor(textColorPrimary);
-                precipitationValue.setTextColor(textColorSecondary);
-                windTitle.setTextColor(textColorPrimary);
-                windValue.setTextColor(textColorSecondary);
-                humidityTitle.setTextColor(textColorPrimary);
-                humidityValue.setTextColor(textColorSecondary);
-                pressureTitle.setTextColor(textColorPrimary);
-                pressureValue.setTextColor(textColorSecondary);
-                expandCollapseButtonDivider.setBackgroundColor(dividerColor);
-                ((RippleDrawable) expandCollapseButton.getBackground())
-                        .setColor(ColorStateList.valueOf(rippleColor));
-                expandCollapseButtonText.setTextColor(textColorPrimary);
-                expandCollapseButtonIcon.setImageTintList(ColorStateList.valueOf(iconColor));
-            } else if (conditionImageColor == 0) {
-                image.setImageTintList(null);
-            }
         }
 
         public View getForecastCard() {
