@@ -27,22 +27,6 @@
             android:name=".activities.MainActivity"
             android:hardwareAccelerated="true" />
 
-        <activity
-            android:name=".activities.AppSettingsActivity"
-            android:label="@string/weather_settings_title"
-            android:theme="@style/AppSettingsSplashTheme"
-            android:exported="true"
-            android:taskAffinity=""
-            android:excludeFromRecents="true" />
-
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/weather_settings_title"
-            android:theme="@style/SettingsSplashTheme"
-            android:exported="true"
-            android:taskAffinity=""
-            android:excludeFromRecents="true" />
-
         <activity-alias
             android:name=".DetailedWeatherActivity"
             android:exported="true"
