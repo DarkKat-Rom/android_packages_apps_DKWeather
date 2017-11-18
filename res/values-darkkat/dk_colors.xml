@@ -15,8 +15,8 @@
 -->
 <resources>
 
-    <!-- Night (DarkKat) theme colors -->
+    <!-- Theme.Material (DarkKat version) -->
 
     <!-- Weather card divider color -->
-    <color name="divider_color">#1fffffff</color>  <!-- 12% white -->
+    <color name="divider_color">@color/divider_dark</color>
 </resources>

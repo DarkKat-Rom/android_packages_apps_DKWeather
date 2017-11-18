@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/weather_not_available_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/toolbar_text_color" />
+                android:textColor="@color/nav_view_header_text_color" />
 
             <TextView
                 android:id="@+id/nav_view_header_subtitle"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/weather_not_available_subtitle"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/toolbar_text_color" />
+                android:textColor="@color/nav_view_header_text_color" />
 
         </LinearLayout>
     </LinearLayout>

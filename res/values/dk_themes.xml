@@ -15,9 +15,7 @@
 -->
 <resources>
 
-    <!-- Day/night (all) themes -->
-
-    <!-- App themes -->
+    <!-- Default themes -->
 
     <!-- Base app theme -->
     <style name="BaseTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -26,6 +24,7 @@
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="colorAccent">@color/theme_accent</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
     <!-- App splash theme -->
@@ -35,9 +34,6 @@
 
     <!-- App theme -->
     <style name="AppTheme" parent="@style/BaseTheme">
-        <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="dividerColor">@color/divider_color</item>
-        <item name="toolbarUpdateButtonIconTint">@color/toolbar_icon_tint</item>
-        <item name="toolbarRippleColor">@color/ripple_color</item>
     </style>
 </resources>

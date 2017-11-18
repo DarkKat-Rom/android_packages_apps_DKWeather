@@ -32,6 +32,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="@dimen/toolbar_elevation"
+            app:theme="?attr/actionBarTheme"
             style="?attr/toolbarStyle" />
 
         <FrameLayout

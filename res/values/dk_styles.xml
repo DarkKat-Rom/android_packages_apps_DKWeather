@@ -15,7 +15,7 @@
 -->
 <resources>
 
-    <!-- Day/night (Material, Material.Light and Darkkat) theme styles -->
+    <!-- Default styles -->
     <style name="NavViewHeaderStyle">
         <item name="android:background">@drawable/nav_view_header_background</item>
     </style>
@@ -24,19 +24,5 @@
         <item name="android:src">@drawable/weather_na</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:background">@drawable/nav_view_header_icon_background</item>
-    </style>
-
-    <!-- Default action- and toolbar styles -->
-    <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="titleTextAppearance">@style/ToolbarTitleText</item>
-        <item name="subtitleTextAppearance">@style/ToolbarSubtitleText</item>
-    </style>
-
-    <style name="ToolbarTitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@color/toolbar_text_color</item>
-    </style>
-
-    <style name="ToolbarSubtitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
-        <item name="android:textColor">@color/toolbar_sub_text_color</item>
     </style>
 </resources>
