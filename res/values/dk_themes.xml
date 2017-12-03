@@ -36,4 +36,21 @@
     <style name="AppTheme" parent="@style/BaseTheme">
         <item name="dividerColor">@color/divider_color</item>
     </style>
+
+    <style name="ThemeOverlay" parent="@style/AppTheme" />
+
+    <style name="ThemeOverlay.LightStatusBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/background_light_action_bar</item>
+        <item name="colorPrimaryDark">@color/background_light_system_bars</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+    </style>
+
+    <style name="ThemeOverlay.LightNavigationBar">
+        <item name="android:navigationBarColor">@color/background_light_system_bars</item>
+    </style>
+
+    <style name="ThemeOverlay.LightStatusBar.LightNavigationBar">
+        <item name="android:navigationBarColor">@color/background_light_system_bars</item>
+    </style>
 </resources>

@@ -25,14 +25,18 @@
     <color name="material_grey_100">#fff5f5f5</color>
     <color name="material_grey_300">#ffe0e0e0</color>
 
+    <!-- Light mode colors -->
+    <color name="background_light_action_bar">@color/material_grey_100</color>
+    <color name="background_light_system_bars">@color/material_grey_300</color>
+
     <!-- DarkKat colors -->
     <color name="primary_darkkat">@color/material_blue_500</color>
     <color name="primary_dark_darkkat">@color/material_blue_700</color>
     <color name="accent_darkkat">#ff5a8596</color>  <!-- 12% holo blue light over material blue grey 500 -->
 
     <!-- Whiteout colors -->
-    <color name="primary_whiteout">@color/material_grey_100</color>
-    <color name="primary_dark_whiteout">@color/material_grey_300</color>
+    <color name="primary_whiteout">@color/background_light_action_bar</color>
+    <color name="primary_dark_whiteout">@color/background_light_system_bars</color>
     <color name="accent_whiteout">@color/black</color>
 
     <!-- Blackout colors -->
