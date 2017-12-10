@@ -25,7 +25,8 @@
 
         <activity
             android:name=".activities.MainActivity"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"
+            android:exported="true" />
 
         <activity-alias
             android:name=".DetailedWeatherActivity"
