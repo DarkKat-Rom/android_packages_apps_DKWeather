@@ -20,22 +20,15 @@
     <string name="weather_title">Wetter</string>
     <string name="weather_not_available_title">Wetter Daten nicht verfügbar</string>
 
-    <!-- Navigation drawer -->
-    <string name="menu_item_weather_today_title">Today</string>
-    <string name="menu_item_weather_forecast_1_title">Forecast 1</string>
-    <string name="menu_item_weather_forecast_2_title">Forecast 2</string>
-    <string name="menu_item_weather_forecast_3_title">Forecast 3</string>
-    <string name="menu_item_weather_forecast_4_title">Forecast 4</string>
-
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Deaktiviert</string>
 
-    <!-- Toolbar -->
+    <!-- Actionbar -->
     <string name="today_title">Heute</string>
     <string name="update_weather">Wetter aktuallisieren</string>
     <string name="weather_updated">Wetterdaten wurden aktuallisiert</string>
 
-    <!-- Detailed weather view -->
+    <!-- Weather fragments -->
 	<string name="current_title">Aktuell</string>
 	<string name="forecast_title">Vorhersage</string>
 	<string name="daytemps_title">Tagestemperaturen</string>
@@ -45,7 +38,6 @@
 	<string name="night_title">Nachts:</string>
 	<string name="min_title">Min. :</string>
 	<string name="max_title">Max. :</string>
-
 	<string name="precipitation_title">Niederschlag:</string>
 	<string name="no_precipitation_value">Keiner</string>
 	<string name="wind_title">Wind:</string>
@@ -55,6 +47,10 @@
 	<string name="sunset_title">Sonnenuntergang:</string>
 	<string name="expand_card">Mehr anzeigen</string>
 	<string name="collapse_card">Weniger anzeigen</string>
+
+    <!-- Bottom navigation bar -->
+    <string name="action_previous_day_title">Vorheriger Tag</string>
+    <string name="action_next_day_title">Nächster Tag</string>
 
     <!-- Units -->
     <string name="temp_celsius_unit_title">C</string>
@@ -81,15 +77,12 @@
 	<string name="notification_show_dk_icon_title">DarkKat Icon anzeigen</string>
 	<string name="notification_show_secure_title">Ausgeblendeten Inhalt anzg.</string>
 
-    <!-- Weather notification -->
-	<string name="action_settings_title">Einstellungen</string>
-
     <!-- CyanogenMod additions -->
 
     <!-- General -->
     <string name="unknown">Unbekannt</string>
 
-    <!-- Weather - Weather codes -->
+    <!-- Weather codes -->
     <string name="weather_0">Tornado</string>
     <string name="weather_1">Tropensturm</string>
     <string name="weather_2">Hurrikan</string>

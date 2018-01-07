@@ -26,8 +26,11 @@
             android:targetPackage="net.darkkatrom.dkweather"
             android:targetClass="net.darkkatrom.dkweather.activities.MainActivity">
             <extra
-                android:name="start_fragment"
-                android:value="1" />
+                android:name="visible_screen"
+                android:value="5" />
+            <extra
+                android:name="day_index"
+                android:value="0" />
         </intent>
         <categories android:name="android.shortcut.conversation" />
     </shortcut>

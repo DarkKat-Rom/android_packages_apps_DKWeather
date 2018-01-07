@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 DarkKat
+<!-- Copyright (C) Copyright (C) 2016 DarkKat
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,16 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-
-    <!-- Default styles -->
-    <style name="NavViewHeaderStyle">
-        <item name="android:background">@drawable/nav_view_header_background</item>
-    </style>
-
-    <style name="NavViewHeaderImageStyle">
-        <item name="android:src">@drawable/weather_na</item>
-        <item name="android:scaleType">centerCrop</item>
-        <item name="android:background">@drawable/nav_view_header_icon_background</item>
-    </style>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <solid android:color="?android:attr/colorControlHighlight" />
+</shape>

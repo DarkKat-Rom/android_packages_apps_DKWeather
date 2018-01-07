@@ -23,7 +23,4 @@
 
     <!-- Overlay for theme default accent color -->
     <color name="theme_accent">@color/accent_whiteout</color>
-
-    <!-- Navigation view header colors -->
-    <color name="nav_view_header_text_color">@color/text_primary_light</color>
 </resources>

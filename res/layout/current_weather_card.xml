@@ -77,7 +77,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/current_card_condition_image_divider_margin_start_end"
                 android:layout_marginEnd="@dimen/current_card_condition_image_divider_margin_start_end"
-                android:background="?attr/dividerColor" />
+                android:background="@drawable/divider_background" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_height="@dimen/current_card_condition_temp_divider_height"
                     android:layout_marginTop="@dimen/current_card_condition_temp_divider_margin_top_bottom"
                     android:layout_marginBottom="@dimen/current_card_condition_temp_divider_margin_top_bottom"
-                    android:background="?attr/dividerColor" />
+                    android:background="@drawable/divider_background" />
 
                 <TextView
                     android:id="@+id/current_low_high"
@@ -369,7 +369,7 @@
             android:id="@+id/current_expand_collapse_button_divider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/current_card_expanded_content_expand_collapse_button_divider_height"
-            android:background="?attr/dividerColor"
+            android:background="@drawable/divider_background"
             android:alpha="0"
             android:visibility="gone" />
 
@@ -387,7 +387,7 @@
                 android:paddingEnd="@dimen/current_card_expanded_content_bottom_bar_provider_link_padding_start_end"
                 android:text="@string/provider_openweathermap"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?attr/colorAccent"
+                android:textColor="?android:attr/colorAccent"
                 android:clickable="true"
                 android:background="@drawable/ripple_drawable_rectangle" />
 

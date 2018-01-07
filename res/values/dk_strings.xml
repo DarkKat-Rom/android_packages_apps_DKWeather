@@ -20,23 +20,15 @@
     <string name="weather_title">Weather</string>
     <string name="weather_not_available_title">Weather data not available</string>
 
-    <!-- Navigation drawer -->
-    <string name="menu_item_weather_today_title">Today</string>
-    <string name="menu_item_weather_forecast_1_title">Forecast 1</string>
-    <string name="menu_item_weather_forecast_2_title">Forecast 2</string>
-    <string name="menu_item_weather_forecast_3_title">Forecast 3</string>
-    <string name="menu_item_weather_forecast_4_title">Forecast 4</string>
-
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Disabled</string>
 
-    <!-- Toolbar -->
+    <!-- Actionbar -->
     <string name="today_title">Today</string>
     <string name="update_weather">Update Weather</string>
     <string name="weather_updated">Weather data has been updated</string>
 
-
-    <!-- Detailed weather view -->
+    <!-- Weather fragments -->
     <string name="current_title">Current</string>
     <string name="forecast_title">Forecast</string>
     <string name="daytemps_title">Day temps</string>
@@ -46,7 +38,6 @@
     <string name="night_title">Night:</string>
     <string name="min_title">Min. :</string>
     <string name="max_title">Max. :</string>
-
     <string name="precipitation_title">Precipitation:</string>
     <string name="no_precipitation_value">None</string>
     <string name="wind_title">Wind:</string>
@@ -56,6 +47,10 @@
     <string name="sunset_title">Sunset:</string>
     <string name="expand_card">Show more</string>
     <string name="collapse_card">Show less</string>
+
+    <!-- Bottom navigation bar -->
+    <string name="action_previous_day_title">Previous day</string>
+    <string name="action_next_day_title">Next day</string>
 
     <!-- Units -->
     <string name="temp_celsius_unit_title">C</string>
@@ -81,9 +76,6 @@
     <string name="notification_show_location_title">Show location</string>
     <string name="notification_show_dk_icon_title">Show DarkKat icon</string>
     <string name="notification_show_secure_title">Show hidden content</string>
-
-    <!-- Weather notification -->
-    <string name="action_settings_title">Settings</string>
 
     <!-- CyanogenMod additions -->
 

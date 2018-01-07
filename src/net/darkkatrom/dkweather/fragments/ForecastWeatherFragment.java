@@ -19,7 +19,6 @@ package net.darkkatrom.dkweather.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -39,11 +38,10 @@ import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
 import net.darkkatrom.dkweather.activities.MainActivity;
-import net.darkkatrom.dkweather.utils.Config;
 
 import java.util.ArrayList;
 
-public class ForecastWeatherFragment extends Fragment {
+public class ForecastWeatherFragment extends WeatherFragment {
     private WeatherInfo mWeatherInfo;
     private LayoutInflater mInflater;
 
@@ -56,7 +54,7 @@ public class ForecastWeatherFragment extends Fragment {
     private TextView mMaxValue;
     private TextView mProviderLink;
 
-    private String mForecastDay;
+
     private int mDayForecastIndex = 1;
 
     private ArrayList<ViewHolder> mHolders = new ArrayList<ViewHolder>();
@@ -70,7 +68,6 @@ public class ForecastWeatherFragment extends Fragment {
 
     private View inflateAndSetupView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mWeatherInfo = Config.getWeatherData(getActivity());
         mInflater = inflater;
 
         View layout = mInflater.inflate(R.layout.detailed_weather_forecast, container, false);
@@ -109,50 +106,24 @@ public class ForecastWeatherFragment extends Fragment {
             }
         });
 
-        if (savedInstanceState != null) {
-            mForecastDay = savedInstanceState.getString(MainActivity.KEY_DAY_INDEX);
-        }
-
-        if (mWeatherInfo != null && mCardsLayout != null && mForecastDay != null) {
-            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(mForecastDay);
-            if (hourForecasts.size() != 0) {
-                final String[] tempValues = {
-                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedMorning(),
-                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedDay(),
-                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedEvening(),
-                    mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedNight()
-                };
-                for (int i = 0; i < mDayTempsValues.length; i++) {
-                    mDayTempsValues[i].setText(tempValues[i]);
-                }
-                final String min =
-                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedLow();
-                final String max =
-                        mWeatherInfo.getForecasts().get(mDayForecastIndex).getFormattedHigh();
-                mMinValue.setText(min);
-                mMaxValue.setText(max);
-                for (int i = 0; i < hourForecasts.size(); i++) {
-                    HourForecast h = hourForecasts.get(i);
-                    ViewHolder holder = new ViewHolder(mInflater);
-                    holder.updateWeather(h);
-                    mHolders.add(holder);
-                    mCardsLayout.addView(holder.getForecastCard());
-                }
-            }
-        }
         return layout;
     }
 
-    public void setForecastDay(String forecastDay) {
-        mForecastDay = forecastDay;
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) getActivity()).onFragmentResume(this);
     }
 
+    @Override
     public void setDayForecastIndex(int index) {
         mDayForecastIndex = index;
+
     }
 
-    public void updateWeather(WeatherInfo weather) {
-        if (weather == null) {
+    @Override
+    public void updateContent(WeatherInfo weather) {
+        if (getActivity() == null || weather == null) {
             return;
         }
         mWeatherInfo = weather;
@@ -182,14 +153,14 @@ public class ForecastWeatherFragment extends Fragment {
                     for (int i = 0; i < hourForecasts.size(); i++) {
                         HourForecast h = hourForecasts.get(i);
                         ViewHolder holder = new ViewHolder(mInflater);
-                        holder.updateWeather(h);
+                        holder.updateContent(h);
                         mHolders.add(holder);
                         mCardsLayout.addView(holder.getForecastCard());
                     }
                 } else {
                     for (int i = 0; i < hourForecasts.size(); i++) {
                         HourForecast h = hourForecasts.get(i);
-                        mHolders.get(i).updateWeather(h);
+                        mHolders.get(i).updateContent(h);
                     }
                 }
             }
@@ -327,7 +298,7 @@ public class ForecastWeatherFragment extends Fragment {
             return animator;
         }
 
-        public void updateWeather(HourForecast h) {
+        public void updateContent(HourForecast h) {
             if (getActivity() == null || mWeatherInfo == null) {
                 return;
             }
@@ -354,11 +325,5 @@ public class ForecastWeatherFragment extends Fragment {
             humidityValue.setText(h.getFormattedHumidity());
             pressureValue.setText(h.getFormattedPressure());
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString(MainActivity.KEY_DAY_INDEX, mForecastDay);
-        super.onSaveInstanceState(outState);
     }
 }

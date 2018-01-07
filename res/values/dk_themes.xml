@@ -15,42 +15,30 @@
 -->
 <resources>
 
-    <!-- Default themes -->
-
-    <!-- Base app theme -->
-    <style name="BaseTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="colorPrimary">@color/theme_primary</item>
-        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
-        <item name="colorAccent">@color/theme_accent</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-    </style>
-
     <!-- App splash theme -->
-    <style name="AppSplashTheme" parent="BaseTheme">
+    <style name="AppSplashTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
     </style>
 
     <!-- App theme -->
-    <style name="AppTheme" parent="@style/BaseTheme">
-        <item name="dividerColor">@color/divider_color</item>
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/theme_primary</item>
+        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 
-    <style name="ThemeOverlay" parent="@style/AppTheme" />
-
-    <style name="ThemeOverlay.LightStatusBar">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="colorPrimary">@color/background_light_action_bar</item>
-        <item name="colorPrimaryDark">@color/background_light_system_bars</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+    <style name="ThemeOverlay.LightStatusBar" parent="@android:style/Theme.Material.Light.LightStatusBar">
+        <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 
-    <style name="ThemeOverlay.LightNavigationBar">
+    <style name="ThemeOverlay.LightNavigationBar" parent="@style/AppTheme">
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/background_light_system_bars</item>
     </style>
 
     <style name="ThemeOverlay.LightStatusBar.LightNavigationBar">
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/background_light_system_bars</item>
     </style>
 </resources>

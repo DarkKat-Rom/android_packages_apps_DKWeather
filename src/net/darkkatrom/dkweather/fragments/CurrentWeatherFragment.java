@@ -19,7 +19,6 @@ package net.darkkatrom.dkweather.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -38,11 +37,11 @@ import com.android.internal.util.darkkat.WeatherHelper;
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
-import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.activities.MainActivity;
 
 import java.util.ArrayList;
 
-public class CurrentWeatherFragment extends Fragment {
+public class CurrentWeatherFragment extends WeatherFragment {
     private WeatherInfo mWeatherInfo;
     private LayoutInflater mInflater;
 
@@ -93,7 +92,6 @@ public class CurrentWeatherFragment extends Fragment {
 
     private View inflateAndSetupView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mWeatherInfo = Config.getWeatherData(getActivity());
         mInflater = inflater;
 
         View layout = mInflater.inflate(R.layout.detailed_weather_current, container, false);
@@ -173,56 +171,20 @@ public class CurrentWeatherFragment extends Fragment {
             }
         });
 
-        if (mWeatherInfo != null) {
-            Drawable icon = mWeatherInfo.getConditionIcon(
-                    WeatherHelper.getDetailedWeatherConditionIconType(getActivity()),
-                    mWeatherInfo.getConditionCode());
-            final String[] tempValues = {
-                mWeatherInfo.getForecasts().get(0).getFormattedMorning(),
-                mWeatherInfo.getForecasts().get(0).getFormattedDay(),
-                mWeatherInfo.getForecasts().get(0).getFormattedEvening(),
-                mWeatherInfo.getForecasts().get(0).getFormattedNight()
-            };
-
-            mTime.setText(mWeatherInfo.getTime());
-            mImage.setImageDrawable(icon);
-            mTemp.setText(mWeatherInfo.getFormattedTemperature());
-            mTempLowHight.setText(mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh());
-            mCondition.setText(mWeatherInfo.getCondition());
-            for (int i = 0; i < mDayTempsValues.length; i++) {
-                mDayTempsValues[i].setText(tempValues[i]);
-            }
-            setPrecipitation(mWeatherInfo);
-            mWindValue.setText(mWeatherInfo.getFormattedWind());
-            mSunriseValue.setText(mWeatherInfo.getSunrise());
-            mHumidityValue.setText(mWeatherInfo.getFormattedHumidity());
-            mPressureValue.setText(mWeatherInfo.getFormattedPressure());
-            mSunsetValue.setText(mWeatherInfo.getSunset());
-
-            if (mCardsLayout != null) {
-                ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(getForecastDay());
-                if (hourForecasts.size() != 0) {
-                    for (int i = 0; i < hourForecasts.size(); i++) {
-                        HourForecast h = hourForecasts.get(i);
-                        ViewHolder holder = new ViewHolder(mInflater);
-                        holder.updateWeather(h);
-                        mHolders.add(holder);
-                        mCardsLayout.addView(holder.getForecastCard());
-                    }
-                }
-            }
-        }
         mAnimator = createAnimator();
 
         return layout;
     }
 
-    private String getForecastDay() {
-        return mWeatherInfo.getHourForecastDays().get(0);
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) getActivity()).onFragmentResume(this);
     }
 
-    public void updateWeather(WeatherInfo weather) {
-        if (weather == null) {
+    @Override
+    public void updateContent(WeatherInfo weather) {
+        if (getActivity() == null || weather == null) {
             return;
         }
         mWeatherInfo = weather;
@@ -252,8 +214,8 @@ public class CurrentWeatherFragment extends Fragment {
         mPressureValue.setText(mWeatherInfo.getFormattedPressure());
         mSunsetValue.setText(mWeatherInfo.getSunset());
 
-        if (mCardsLayout != null) {
-            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(getForecastDay());
+        if (mCardsLayout != null && mForecastDay != null) {
+            ArrayList<HourForecast> hourForecasts = mWeatherInfo.getHourForecastsDay(mForecastDay);
             if (hourForecasts.size() != 0) {
                 if (mHolders.size() != hourForecasts.size()) {
                     if (mCardsLayout.getChildCount() > 1) {
@@ -262,14 +224,14 @@ public class CurrentWeatherFragment extends Fragment {
                     for (int i = 0; i < hourForecasts.size(); i++) {
                         HourForecast h = hourForecasts.get(i);
                         ViewHolder holder = new ViewHolder(mInflater);
-                        holder.updateWeather(h);
+                        holder.updateContent(h);
                         mHolders.add(holder);
                         mCardsLayout.addView(holder.getForecastCard());
                     }
                 } else {
                     for (int i = 0; i < hourForecasts.size(); i++) {
                         HourForecast h = hourForecasts.get(i);
-                        mHolders.get(i).updateWeather(h);
+                        mHolders.get(i).updateContent(h);
                     }
                 }
             }
@@ -478,7 +440,7 @@ public class CurrentWeatherFragment extends Fragment {
             return animator;
         }
 
-        public void updateWeather(HourForecast h) {
+        public void updateContent(HourForecast h) {
             if (getActivity() == null || mWeatherInfo == null) {
                 return;
             }

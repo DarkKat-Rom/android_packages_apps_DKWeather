@@ -15,18 +15,10 @@
 -->
 <resources>
 
-    <!-- Toolbar -->
-    <dimen name="toolbar_elevation">4dp</dimen>
-    <dimen name="toolbar_update_button_size">48dp</dimen>
+    <!-- Actionbar -->
+    <dimen name="actionbar_update_button_size">48dp</dimen>
 
-    <!-- Navigation view header -->
-    <dimen name="nav_view_header_height">158dp</dimen>
-    <dimen name="nav_view_header_keyline_padding">16dp</dimen>
-    <dimen name="nav_view_header_padding_bottom">8dp</dimen>
-    <dimen name="nav_view_header_text_layout_height">56dp</dimen>
-    <dimen name="nav_view_header_icon_size">64dp</dimen>
-
-    <!-- Detailed weather -->
+    <!-- Weather fragments -->
     <dimen name="detailed_weather_fading_edge_length">12dp</dimen>
     <dimen name="detailed_weather_cards_layout_padding_top_bottom">4dp</dimen>
 
@@ -117,7 +109,16 @@
 
     <dimen name="forecast_daytemps_card_provider_link_height">48dp</dimen>
     <dimen name="forecast_daytemps_card_provider_link_padding_start_end">16dp</dimen>
-    <!-- Detailed weather end -->
+    <!-- Weather fragments end -->
+
+    <!-- Bottom navigation bar -->
+    <dimen name="bottom_navigation_bar_height">56dp</dimen>
+    <dimen name="bottom_navigation_bar_elevation">8dp</dimen>
+    <dimen name="bottom_navigation_bar_item_icon_size">24dp</dimen>
+    <dimen name="bottom_navigation_bar_item_icon_margin_top">6dp</dimen>
+    <dimen name="bottom_navigation_bar_item_text_padding_start_end">12dp</dimen>
+    <dimen name="bottom_navigation_bar_item_text_padding_bottom">10dp</dimen>
+    <dimen name="bottom_navigation_bar_item_text_size">12sp</dimen>
 
     <!-- Notification -->
     <dimen name="notification_small_icon_size">24dp</dimen>

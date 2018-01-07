@@ -23,4 +23,8 @@
 
     <!-- Forecast unavailable -->
     <string name="weather_3200" translatable="false"></string>
+
+    <!-- OmniROM Project additions -->
+    <string name="provider_openweathermap" translatable="false">OpenWeatherMap</string>
+    <string name="provider_yahoo" translatable="false">Yahoo</string>
 </resources>

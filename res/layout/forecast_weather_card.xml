@@ -78,7 +78,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/forecast_card_condition_image_divider_margin_start_end"
                 android:layout_marginEnd="@dimen/forecast_card_condition_image_divider_margin_start_end"
-                android:background="?attr/dividerColor" />
+                android:background="@drawable/divider_background" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                     android:layout_height="@dimen/forecast_card_condition_temp_divider_height"
                     android:layout_marginTop="@dimen/forecast_card_condition_temp_divider_margin_top_bottom"
                     android:layout_marginBottom="@dimen/forecast_card_condition_temp_divider_margin_top_bottom"
-                    android:background="?attr/dividerColor" />
+                    android:background="@drawable/divider_background" />
 
                 <TextView
                     android:id="@+id/forecast_condition_value"
@@ -211,7 +211,7 @@
             android:id="@+id/forecast_expand_collapse_button_divider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/forecast_card_expanded_content_expand_collapse_button_divider_height"
-            android:background="?attr/dividerColor"
+            android:background="@drawable/divider_background"
             android:alpha="0"
             android:visibility="gone" />
 

@@ -18,14 +18,14 @@
     android:id="@+id/update_button_layout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@drawable/toolbar_update_button_bg">
+    android:background="@drawable/actionbar_update_button_bg">
 
     <ImageView
         android:id="@+id/update_button"
-        android:layout_width="@dimen/toolbar_update_button_size"
-        android:layout_height="@dimen/toolbar_update_button_size"
+        android:layout_width="@dimen/actionbar_update_button_size"
+        android:layout_height="@dimen/actionbar_update_button_size"
         android:layout_gravity="center_vertical"
-        android:tint="?attr/colorControlNormal"
+        android:tint="?android:attr/colorControlNormal"
         android:src="@drawable/ic_menu_update"
         android:scaleType="centerInside" />
 

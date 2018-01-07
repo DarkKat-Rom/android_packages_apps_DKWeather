@@ -48,8 +48,4 @@
     <color name="text_primary_dark">@color/white</color>
     <color name="text_primary_light">#de000000</color>  <!-- 87% black -->
     <color name="text_secondary_light">#8a000000</color>  <!-- 54% black -->
-
-    <!-- Divider colors -->
-    <color name="divider_dark">#1fffffff</color>  <!-- 12% white -->
-    <color name="divider_light">#1f000000</color>  <!-- 12% black -->
 </resources>

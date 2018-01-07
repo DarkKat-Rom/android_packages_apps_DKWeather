@@ -18,16 +18,10 @@ package net.darkkatrom.dkweather.activities;
 import android.app.Fragment;
 import android.app.UiModeManager;
 import android.content.ContentResolver;
-import android.content.res.TypedArray;
 import android.database.ContentObserver;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -44,11 +38,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import com.android.internal.util.darkkat.ThemeHelper;
+import com.android.internal.util.darkkat.ThemeOverlayHelper;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherService;
+import net.darkkatrom.dkweather.fragments.WeatherFragment;
 import net.darkkatrom.dkweather.fragments.CurrentWeatherFragment;
 import net.darkkatrom.dkweather.fragments.ForecastWeatherFragment;
 import net.darkkatrom.dkweather.fragments.SettingsFragment;
@@ -60,23 +55,20 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class MainActivity extends BaseActivity implements
-        NavigationView.OnNavigationItemSelectedListener,  OnClickListener, OnLongClickListener {
+        OnClickListener, OnLongClickListener {
 
     private static final String TAG = "MainActivity";
 
     private static final Uri WEATHER_URI =
             Uri.parse("content://net.darkkatrom.dkweather.provider/weather");
 
-    public static final String KEY_DAY_INDEX = "day_index";
-    public static final String KEY_START_FRAGMENT = "start_fragment";
+    public static final String KEY_VISIBLE_SCREEN = "visible_screen";
+    public static final String KEY_DAY_INDEX      = "day_index";
 
-    public static final int FRAGMENT_WEATHER  = 0;
-    public static final int FRAGMENT_SETTINGS = 1;
-
-    public static final int DAY_INDEX_TODAY  = 0;
-
-    private static final int MENU_ITEM_INDEX_TODAY    = 0;
-    private static final int MENU_ITEM_INDEX_SETTINGS = 5;
+    public static final int TODAY     = 0;
+    public static final int TOMORROW  = 1;
+    public static final int LAST_DAY  = 4;
+    public static final int SETTINGS  = 5;
 
     private static final int TOAST_SPACE_TOP = 24;
 
@@ -86,18 +78,16 @@ public class MainActivity extends BaseActivity implements
 
     private WeatherInfo mWeatherInfo;
 
-    private CurrentWeatherFragment mCurrentWeatherFragment;
-    private ForecastWeatherFragment mForecastWeatherFragment;
-
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
+    private CharSequence[] mActionBarSubTitles;
 
     private ImageView mUpdateButton;
 
-    private CharSequence[] mMenuItemTitles;
+    private View mNavigationButtonPreviousDay;
+    private View mNavigationButtonSettings;
+    private View mNavigationButtonNextDay;
 
-    private int mSelectedMenuItemIndex = MENU_ITEM_INDEX_TODAY;
-    private int mOldSelectedMenuItemIndex = MENU_ITEM_INDEX_TODAY;
+    private int mVisibleScreen = TODAY;
+    private int mDayIndex = mVisibleScreen;
 
     private boolean mUpdateRequested = false;
 
@@ -126,7 +116,7 @@ public class MainActivity extends BaseActivity implements
                 }
             } else {
                 mWeatherInfo = getWeather();
-                updateWeather();
+                updateContent();
                 if (mUpdateRequested) {
                     showToast(R.string.weather_updated);
                     mUpdateRequested = false;
@@ -137,10 +127,31 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mUseOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
+        updateTheme();
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.main);
+
+        mHandler = new Handler();
+        mResolver = getContentResolver();
+        mWeatherObserver = new WeatherObserver(mHandler);
+
+        createOrRestoreState(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
+        updateActionBar();
+        setupBottomNavigation();
+
+        mWeatherInfo = getWeather();
+
+        if (savedInstanceState == null) {
+            replaceFragment();
+        }
+    }
+
+    private void updateTheme() {
+        mUseOptionalLightStatusBar = ThemeOverlayHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeOverlayHelper.useLightStatusBar(this);
+        mUseOptionalLightNavigationBar = ThemeOverlayHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeOverlayHelper.useLightNavigationBar(this);
         int themeResId = 0;
 
         if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
@@ -159,7 +170,7 @@ public class MainActivity extends BaseActivity implements
         if (!mUseOptionalLightStatusBar) {
             // Possibly we are using the Whiteout theme
             boolean isWhiteoutTheme =
-                    ThemeHelper.getTheme(this) == UiModeManager.MODE_NIGHT_NO_WHITEOUT;
+                    ThemeOverlayHelper.getThemeOverlay(this) == ThemeOverlayHelper.THEME_OVERLAY_WHITEOUT;
             boolean isLightStatusBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             // Check if light status bar flag was set,
@@ -170,9 +181,7 @@ public class MainActivity extends BaseActivity implements
                 newFlags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
         }
-        if (mUseOptionalLightNavigationBar) {
-            newFlags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-        } else {
+        if (!mUseOptionalLightNavigationBar) {
             // Check if light navigation bar flag was set
             boolean isLightNavigationBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -184,87 +193,79 @@ public class MainActivity extends BaseActivity implements
         if (oldFlags != newFlags) {
             getWindow().getDecorView().setSystemUiVisibility(newFlags);
         }
+    }
 
-        super.onCreate(savedInstanceState);
+    private void createOrRestoreState(Bundle b) {
+        if (b == null) {
+            mVisibleScreen = TODAY;
+            mDayIndex = TODAY;
+        } else {
+            mVisibleScreen = b.getInt(KEY_VISIBLE_SCREEN);
+            mDayIndex = b.getInt(KEY_DAY_INDEX);
+        }
+    }
 
-        mHandler = new Handler();
-        mResolver = getContentResolver();
-        mWeatherObserver = new WeatherObserver(mHandler);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
-
-        setupNavigationView(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
-
+    private void updateActionBar() {
         TimeZone myTimezone = TimeZone.getDefault();
         Calendar calendar = new GregorianCalendar(myTimezone);
-        TypedArray ta = getResources().obtainTypedArray(R.array.navigation_menu_items);
-        mMenuItemTitles = new String[6];
-        for (int i = 0; i <mMenuItemTitles.length; i++) {
+        if (mActionBarSubTitles == null) {
+            mActionBarSubTitles = new String[6];
+        }
+        for (int i = 0; i <mActionBarSubTitles.length; i++) {
             if (i == 0) {
-                mMenuItemTitles[i] = mNavigationView.getMenu().findItem(R.id.menu_item_weather_today).getTitle();
+                mActionBarSubTitles[i] = getResources().getString(R.string.today_title);
             } else if (i == 5) {
-                mMenuItemTitles[i] = mNavigationView.getMenu().findItem(R.id.menu_item_settings).getTitle();
+                mActionBarSubTitles[i] = getResources().getString(R.string.settings_title);
             } else {
-                int resId = ta.getResourceId(i, 0);
-                MenuItem item = mNavigationView.getMenu().findItem(resId);
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
-                item.setTitle(WeatherInfo.getFormattedDate(calendar.getTime(), false));
-                mMenuItemTitles[i] = item.getTitle();
+                mActionBarSubTitles[i] = WeatherInfo.getFormattedDate(calendar.getTime(), false);
             }
         }
-        ta.recycle();
 
-        getSupportActionBar().setSubtitle(mMenuItemTitles[mSelectedMenuItemIndex]);
+        getActionBar().setSubtitle(mActionBarSubTitles[mVisibleScreen]);
+    }
 
-        if (getWeather() != null) {
-            mWeatherInfo = getWeather();
+    private void setupBottomNavigation() {
+        mNavigationButtonPreviousDay = findViewById(R.id.bottom_navigation_item_previous_day);
+        mNavigationButtonSettings = findViewById(R.id.bottom_navigation_item_settings);
+        mNavigationButtonNextDay = findViewById(R.id.bottom_navigation_item_next_day);
 
-            View headerView = mNavigationView.getHeaderView(0);
-            if (headerView != null) {
-                ImageView headerIcon = (ImageView) headerView.findViewById(R.id.nav_view_header_icon);
-                Drawable icon = mWeatherInfo.getConditionIcon(0, mWeatherInfo.getConditionCode()).mutate();
-                headerIcon.setImageDrawable(icon);
+        ImageView iv = (ImageView) mNavigationButtonPreviousDay.findViewById(R.id.bottom_navigation_item_icon);
+        TextView tv = (TextView) mNavigationButtonPreviousDay.findViewById(R.id.bottom_navigation_item_text);
+        iv.setImageResource(R.drawable.ic_action_previous_day);
+        tv.setText(R.string.action_previous_day_title);
 
-                TextView title = (TextView) headerView.findViewById(R.id.nav_view_header_title);
-                TextView subtitle = (TextView) headerView.findViewById(R.id.nav_view_header_subtitle);
-                String titleText = mWeatherInfo.getCondition() + ", " + mWeatherInfo.getFormattedTemperature();
-                String subtitleText = mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh();
-                title.setText(titleText);
-                subtitle.setText(subtitleText);
-            }
+        iv = (ImageView) mNavigationButtonSettings.findViewById(R.id.bottom_navigation_item_icon);
+        tv = (TextView) mNavigationButtonSettings.findViewById(R.id.bottom_navigation_item_text);
+        iv.setImageResource(R.drawable.ic_action_settings);
+        iv.setImageTintList(getColorStateList(R.color.bottom_navigation_selectable_item_text_icon_color));
+        tv.setText(R.string.settings_title);
+        tv.setTextColor(getColorStateList(R.color.bottom_navigation_selectable_item_text_icon_color));
 
-            if (savedInstanceState == null) {
-                Fragment startFragment = getStartFragment(savedInstanceState == null
-                        ? getIntent().getExtras() : savedInstanceState);
+        iv = (ImageView) mNavigationButtonNextDay.findViewById(R.id.bottom_navigation_item_icon);
+        tv = (TextView) mNavigationButtonNextDay.findViewById(R.id.bottom_navigation_item_text);
+        iv.setImageResource(R.drawable.ic_action_next_day);
+        tv.setText(R.string.action_next_day_title);
+        updateBottomNavigationItemState();
 
-                if (startFragment instanceof ForecastWeatherFragment) {
-                    getForecastWeatherFragment().setForecastDay(getForecastDay());
-                }
+    }
 
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, startFragment)
-                        .commit();
-            }
-        }
+    private void updateBottomNavigationItemState() {
+        mNavigationButtonPreviousDay.setEnabled(mVisibleScreen > TODAY
+                && mVisibleScreen != SETTINGS);
+        mNavigationButtonSettings.setSelected(mVisibleScreen == SETTINGS);
+        mNavigationButtonSettings.setEnabled(mVisibleScreen != SETTINGS);
+        mNavigationButtonNextDay.setEnabled(mVisibleScreen < LAST_DAY);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        boolean useOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        boolean useOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
+        boolean useOptionalLightStatusBar = ThemeOverlayHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeOverlayHelper.useLightStatusBar(this);
+        boolean useOptionalLightNavigationBar = ThemeOverlayHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeOverlayHelper.useLightNavigationBar(this);
         if (mUseOptionalLightStatusBar != useOptionalLightStatusBar
                 || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
             recreate();
@@ -279,98 +280,53 @@ public class MainActivity extends BaseActivity implements
         mWeatherObserver.unobserve();
     }
 
-    private WeatherInfo getWeather() {
+    public void onFragmentResume(WeatherFragment f) {
+        f.updateContent(mWeatherInfo);
+    }
+
+    public WeatherInfo getWeather() {
         return Config.getWeatherData(this);
     }
 
     private String getForecastDay() {
-        return mWeatherInfo.getHourForecastDays().get(mSelectedMenuItemIndex);
+        return mWeatherInfo.getHourForecastDays().get(mVisibleScreen);
     }
 
-    private void setupNavigationView(Bundle b) {
-        if (b == null) {
-            mNavigationView.getMenu().findItem(R.id.menu_item_weather_today).setChecked(true);
-            mSelectedMenuItemIndex = MENU_ITEM_INDEX_TODAY;
-        } else if (b.getInt(KEY_START_FRAGMENT) == FRAGMENT_SETTINGS) {
-            mNavigationView.getMenu().findItem(R.id.menu_item_settings).setChecked(true);
-            mSelectedMenuItemIndex = MENU_ITEM_INDEX_SETTINGS;
-        } else {
-            mSelectedMenuItemIndex = b.getInt(KEY_DAY_INDEX);
-            TypedArray ta = getResources().obtainTypedArray(R.array.navigation_menu_items);
-            int resId = ta.getResourceId(mSelectedMenuItemIndex, R.id.menu_item_weather_today);
-            mNavigationView.getMenu().findItem(resId).setChecked(true);
-            ta.recycle();
-        }
-        mOldSelectedMenuItemIndex = mSelectedMenuItemIndex;
-    }
-
-    private Fragment getStartFragment(Bundle b) {
-        if (b == null) {
+    private Fragment getFragmentForVisibleScreen() {
+        if (mVisibleScreen == TODAY) {
             return getCurrentWeatherFragment();
-        } else if (b.getInt(KEY_START_FRAGMENT) == FRAGMENT_SETTINGS) {
-            return new SettingsFragment();
+        } else if (mVisibleScreen == SETTINGS) {
+            return getSettingsFragment();
         } else {
-            if (b.getInt(KEY_DAY_INDEX) == DAY_INDEX_TODAY) {
-                return getCurrentWeatherFragment();
-            } else {
-                return getForecastWeatherFragment();
-            }
+            return getForecastWeatherFragment();
         }
     }
 
-    private CurrentWeatherFragment getCurrentWeatherFragment() {
-        if (mCurrentWeatherFragment == null) {
-            mCurrentWeatherFragment = new CurrentWeatherFragment();
-        }
-        return mCurrentWeatherFragment;
+    private void replaceFragment() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_content, getFragmentForVisibleScreen())
+                .commit();
     }
 
-    private ForecastWeatherFragment getForecastWeatherFragment() {
-        if (mForecastWeatherFragment == null) {
-            mForecastWeatherFragment = new ForecastWeatherFragment();
-        }
-        return mForecastWeatherFragment;
+    private Fragment getCurrentWeatherFragment() {
+        WeatherFragment wf = new CurrentWeatherFragment();
+        wf.setForecastDay(getForecastDay());
+        return wf;
     }
 
-    private void updateWeather() {
-        TimeZone myTimezone = TimeZone.getDefault();
-        Calendar calendar = new GregorianCalendar(myTimezone);
-        TypedArray ta = getResources().obtainTypedArray(R.array.navigation_menu_items);
-        for (int i = 0; i < 5; i++) {
-            if (i != 0) {
-                int resId = ta.getResourceId(i, 0);
-                MenuItem item = mNavigationView.getMenu().findItem(resId);
-                calendar.add(Calendar.DAY_OF_YEAR, 1);
-                item.setTitle(WeatherInfo.getFormattedDate(calendar.getTime(), false));
-                mMenuItemTitles[i] = item.getTitle();
-            }
-        }
-        ta.recycle();
+    private Fragment getForecastWeatherFragment() {
+        WeatherFragment wf = new ForecastWeatherFragment();
+        wf.setForecastDay(getForecastDay());
+        return wf;
+    }
 
-        getSupportActionBar().setSubtitle(mMenuItemTitles[mSelectedMenuItemIndex]);
+    private Fragment getSettingsFragment() {
+        return new SettingsFragment();
+    }
 
-        View headerView = mNavigationView.getHeaderView(0);
-        if (headerView != null) {
-            ImageView headerIcon = (ImageView) headerView.findViewById(R.id.nav_view_header_icon);
-            Drawable icon = mWeatherInfo.getConditionIcon(0, mWeatherInfo.getConditionCode()).mutate();
-            headerIcon.setImageDrawable(icon);
-
-            TextView title = (TextView) headerView.findViewById(R.id.nav_view_header_title);
-            TextView subtitle = (TextView) headerView.findViewById(R.id.nav_view_header_subtitle);
-            String titleText = mWeatherInfo.getCondition() + ", " + mWeatherInfo.getFormattedTemperature();
-            String subtitleText = mWeatherInfo.getFormattedLow() + " | " + mWeatherInfo.getFormattedHigh();
-            title.setText(titleText);
-            subtitle.setText(subtitleText);
-        }
-
-        if (mSelectedMenuItemIndex != MENU_ITEM_INDEX_SETTINGS) {
-            if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_TODAY) {
-                getCurrentWeatherFragment().updateWeather(mWeatherInfo);
-            } else {
-                getForecastWeatherFragment().setForecastDay(getForecastDay());
-                getForecastWeatherFragment().updateWeather(mWeatherInfo);
-            }
-        }
+    private void updateContent() {
+        updateActionBar();
+        replaceFragment();
     }
 
     @Override
@@ -385,59 +341,19 @@ public class MainActivity extends BaseActivity implements
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+    public void onBottomNavigationItemClick(View v) {
+        if (v == mNavigationButtonPreviousDay) {
+            mDayIndex--;
+            mVisibleScreen--;
+        } else if (v == mNavigationButtonSettings) {
+            mVisibleScreen = SETTINGS;
+        } else {
+            mVisibleScreen++;
+            mDayIndex++;
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        if (item.isChecked()) {
-            return false;
-        }
-        mOldSelectedMenuItemIndex = mSelectedMenuItemIndex;
-        TypedArray ta = getResources().obtainTypedArray(R.array.navigation_menu_items);
-        for (int i = 0; i < 6; i++) {
-            int resId = ta.getResourceId(i, 0);
-            if (resId == item.getItemId()) {
-                mSelectedMenuItemIndex = i;
-                if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_TODAY) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, getCurrentWeatherFragment())
-                            .commit();
-                } else if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, new SettingsFragment())
-                            .commit();
-                } else {
-                    if (mWeatherInfo != null) {
-                        getForecastWeatherFragment().setForecastDay(getForecastDay());
-                    }
-//                    if (mOldSelectedMenuItemIndex == MENU_ITEM_INDEX_TODAY
-//                            || mOldSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_content, getForecastWeatherFragment())
-                                .commit();
-//                    } else {
-                        if (mWeatherInfo != null) {
-                            getForecastWeatherFragment().updateWeather(mWeatherInfo);
-                        }
-
-//                    }
-                }
-            }
-        }
-        ta.recycle();
-        uncheckmenuItemIfNeeded();
-        getSupportActionBar().setSubtitle(mMenuItemTitles[mSelectedMenuItemIndex]);
-        mDrawerLayout.closeDrawers();
-        mOldSelectedMenuItemIndex = mSelectedMenuItemIndex;
-        return true;
+        updateActionBar();
+        replaceFragment();
+        updateBottomNavigationItemState();
     }
 
     @Override
@@ -480,64 +396,41 @@ public class MainActivity extends BaseActivity implements
 
     private void showToast(int resId) {
 		float density = getResources().getDisplayMetrics().density;
-        int toolbarHeight = findViewById(R.id.toolbar).getHeight();
+        int actionBarHeight = getActionBar().getHeight();
         int spaceTopDP = TOAST_SPACE_TOP * Math.round(density);
 
         Toast toast = Toast.makeText(this, resId, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, toolbarHeight + spaceTopDP);
+        toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, actionBarHeight + spaceTopDP);
         toast.show();
-    }
-
-    private void uncheckmenuItemIfNeeded() {
-        TypedArray ta = getResources().obtainTypedArray(R.array.navigation_menu_items);
-        int resId;
-        if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_TODAY
-                || mSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS) {
-            resId = ta.getResourceId(mOldSelectedMenuItemIndex, 0);
-            mNavigationView.getMenu().findItem(resId).setChecked(false);
-        } else {
-            if (mOldSelectedMenuItemIndex == MENU_ITEM_INDEX_TODAY
-                    || mOldSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS) {
-                resId = ta.getResourceId(mOldSelectedMenuItemIndex, 0);
-                mNavigationView.getMenu().findItem(resId).setChecked(false);
-            }
-        }
-        ta.recycle();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS) {
-            outState.putInt(KEY_START_FRAGMENT, FRAGMENT_SETTINGS);
-        } else {
-            outState.putInt(KEY_START_FRAGMENT, FRAGMENT_WEATHER);
-            outState.putInt(KEY_DAY_INDEX, mSelectedMenuItemIndex);
-        }
-        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawers();
-            return;
-        }
-        if (mSelectedMenuItemIndex > MENU_ITEM_INDEX_TODAY) {
-            if (mSelectedMenuItemIndex == MENU_ITEM_INDEX_SETTINGS
-                    && getFragmentManager().getBackStackEntryCount() > 0) {
-                super.onBackPressed();
+        if (mVisibleScreen > TODAY) {
+            if (mVisibleScreen == SETTINGS) {
+                if (getFragmentManager().getBackStackEntryCount() > 0) {
+                    super.onBackPressed();
+                } else {
+                    mVisibleScreen = mDayIndex;
+                }
             } else {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, getCurrentWeatherFragment())
-                        .commit();
-                mNavigationView.getMenu().findItem(R.id.menu_item_weather_today).setChecked(true);
-                mSelectedMenuItemIndex = MENU_ITEM_INDEX_TODAY;
-                uncheckmenuItemIfNeeded();
-                getSupportActionBar().setSubtitle(mMenuItemTitles[mSelectedMenuItemIndex]);
-                mOldSelectedMenuItemIndex = MENU_ITEM_INDEX_TODAY;
+                mVisibleScreen = TODAY;
+                mDayIndex = mVisibleScreen;
+            }
+            if (mVisibleScreen != SETTINGS) {
+                updateActionBar();
+                replaceFragment();
+                updateBottomNavigationItemState();
             }
         } else {
             finish();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_VISIBLE_SCREEN, mVisibleScreen);
+        outState.putInt(KEY_DAY_INDEX, mDayIndex);
+        super.onSaveInstanceState(outState);
     }
 }

@@ -193,8 +193,8 @@ public class NotificationUtil {
 
     private PendingIntent getContentIntent(int requestCode, int day) {
         Bundle b = new Bundle();
+        b.putInt(MainActivity.KEY_VISIBLE_SCREEN, day);
         b.putInt(MainActivity.KEY_DAY_INDEX, day);
-        b.putInt(MainActivity.KEY_START_FRAGMENT, MainActivity.FRAGMENT_WEATHER);
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtras(b);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -205,8 +205,9 @@ public class NotificationUtil {
 
     private Action getSettingsAction() {
         Bundle b = new Bundle();
-        b.putInt(MainActivity.KEY_START_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);
-        String title = mResources.getString(R.string.action_settings_title);
+        b.putInt(MainActivity.KEY_VISIBLE_SCREEN, MainActivity.SETTINGS);
+        b.putInt(MainActivity.KEY_DAY_INDEX, MainActivity.TODAY);
+        String title = mResources.getString(R.string.settings_title);
         Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtras(b);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
