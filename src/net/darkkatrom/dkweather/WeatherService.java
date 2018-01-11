@@ -99,6 +99,7 @@ public class WeatherService extends Service {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         mNotificationUtil = new NotificationUtil(this);
         mShortcutUtil = new ShortcutUtil(this);
+        mNotificationUtil.setNotificationChannels();
     }
 
     public static void startUpdate(Context context, boolean force) {
@@ -115,7 +116,7 @@ public class WeatherService extends Service {
         if (force) {
             i.putExtra(EXTRA_FORCE, force);
         }
-        context.startService(i);
+        context.startForegroundService(i);
     }
 
     private static PendingIntent alarmPending(Context context) {
@@ -126,34 +127,41 @@ public class WeatherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        startForeground(NotificationUtil.FOREGROUND_SERVICE_NOTIFICATION_ID,
+                mNotificationUtil.getForegroundNotification());
         boolean force = intent.getBooleanExtra(EXTRA_FORCE, false);
 
         if (mRunning) {
             Log.w(TAG, "Service running ... do nothing");
+            stopForeground(true);
             return START_REDELIVER_INTENT;
         }
 
         if (!Config.isEnabled(this)) {
             Log.w(TAG, "Service started, but not enabled ... stopping");
+            stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
         }
 
         if (ACTION_NOTIFICATION.equals(intent.getAction())) {
             Log.w(TAG, "Update notification");
-            updateNotification();
+            mNotificationUtil.sendNotification();
+            stopForeground(true);
             return START_REDELIVER_INTENT;
         }
 
         if (ACTION_CANCEL_LOCATION_UPDATE.equals(intent.getAction())) {
             Log.w(TAG, "Service started, but location timeout ... stopping");
             WeatherLocationListener.cancel(this);
+            stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
         }
 
         if (!isNetworkAvailable()) {
             if (DEBUG) Log.d(TAG, "Service started, but no network ... stopping");
+            stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -165,6 +173,7 @@ public class WeatherService extends Service {
                 final long updateInterval = ALARM_INTERVAL_BASE * Config.getUpdateInterval(this);
                 if (lastUpdate + updateInterval > now) {
                     if (DEBUG)  Log.d(TAG, "Service started, but update not due ... stopping");
+                    stopForeground(true);
                     stopSelf();
                     return START_NOT_STICKY;
                 }
@@ -172,7 +181,7 @@ public class WeatherService extends Service {
         }
         if (DEBUG) Log.d(TAG, "updateWeather");
         updateWeather();
-
+        stopForeground(true);
         return START_REDELIVER_INTENT;
     }
 
@@ -247,15 +256,6 @@ public class WeatherService extends Service {
         }
     }
 
-    private void updateNotification() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mNotificationUtil.sendNotification();
-            }
-        });
-    }
-
     private void updateWeather() {
         mHandler.post(new Runnable() {
             @Override
@@ -302,7 +302,7 @@ public class WeatherService extends Service {
 
     public static void removeNotification(Context context) {
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                .cancel(NotificationUtil.NOTIFICATION_ID);
+                .cancel(NotificationUtil.WEATHER_NOTIFICATION_ID);
     }
 
     private boolean checkPermissions() {

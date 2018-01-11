@@ -143,7 +143,9 @@ public class MainActivity extends BaseActivity implements
         mWeatherInfo = getWeather();
 
         if (savedInstanceState == null) {
-            replaceFragment();
+            if (mWeatherInfo != null) {
+                replaceFragment();
+            }
         }
     }
 

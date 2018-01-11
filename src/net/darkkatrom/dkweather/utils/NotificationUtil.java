@@ -19,6 +19,7 @@ package net.darkkatrom.dkweather.utils;
 
 import android.app.Notification;
 import android.app.Notification.Action;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -31,7 +32,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -44,11 +44,18 @@ import net.darkkatrom.dkweather.utils.Config;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class NotificationUtil {
-    public static final int NOTIFICATION_ID = 1;
+    public static final int WEATHER_NOTIFICATION_ID            = 1;
+    public static final int FOREGROUND_SERVICE_NOTIFICATION_ID = 2;
+
+    public static final String WEATHER_NOTIFICATION_CHANNEL_ID =
+            "weather_notification_chanel";
+    public static final String FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID =
+            "foreground_service_notification_chanel";
 
     private final Context mContext;
     private final Resources mResources;
@@ -60,15 +67,15 @@ public class NotificationUtil {
 
     public void sendNotification() {
         ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(NOTIFICATION_ID, createNotification());
+                .notify(WEATHER_NOTIFICATION_ID, createWeatherNotification());
     }
 
-    private Notification createNotification() {
+    private Notification createWeatherNotification() {
         WeatherInfo info =  Config.getWeatherData(mContext);
         boolean showDKIcon =  Config.getNotificationShowDKIcon(mContext);
         boolean showSecure =  Config.getNotificationShowSecure(mContext);
 
-        Notification.Builder builder = new Notification.Builder(mContext)
+        Notification.Builder builder = new Notification.Builder(mContext, WEATHER_NOTIFICATION_CHANNEL_ID)
             .setShowWhen(true)
             .setWhen(System.currentTimeMillis())
             .setOngoing(true)
@@ -88,6 +95,18 @@ public class NotificationUtil {
             builder.setVisibility(Notification.VISIBILITY_PUBLIC);
         }
 
+        return builder.build();
+    }
+
+    public Notification getForegroundNotification() {
+        Notification.Builder builder = new Notification.Builder(
+                mContext, FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID)
+            .setShowWhen(true)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_dk)
+            .setContentTitle(mContext.getString(R.string.foreground_service_notification_content_title))
+            .setContentText(mContext.getString(R.string.foreground_service_notification_content_text))
+            .setColor(0xff009688);
         return builder.build();
     }
 
@@ -217,5 +236,49 @@ public class NotificationUtil {
         Action.Builder builder = new Action.Builder(R.drawable.ic_notification_action_settings,
                 title, pendingIntent);
         return builder.build();
+    }
+
+    public void setNotificationChannels() {
+        NotificationManager notificationManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        List<NotificationChannel> channels = new ArrayList<NotificationChannel>();
+        NotificationChannel channel1 = getWeatherNotificationChannel();
+        NotificationChannel channel2 = getForegroundServiceNotificationChannel();
+
+        channel1.setSound(null, null);
+        channel2.setSound(null, null);
+        channel1.enableLights(false);
+        channel2.enableLights(false);
+        channel1.enableVibration(false);
+        channel2.enableVibration(false);
+
+        channels.add(channel1);
+        channels.add(channel2);
+
+        notificationManager.createNotificationChannels(channels);
+    }
+
+    private NotificationChannel getWeatherNotificationChannel() {
+        String id = WEATHER_NOTIFICATION_CHANNEL_ID;
+        CharSequence name = mContext.getString(R.string.weather_notification_chanel_title);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        String description = mContext.getString(R.string.weather_notification_chanel_description);
+
+        NotificationChannel channel = new NotificationChannel(id, name, importance);
+        channel.setDescription(description);
+
+        return channel;
+    }
+
+    private NotificationChannel getForegroundServiceNotificationChannel() {
+        String id = FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID;
+        CharSequence name = mContext.getString(R.string.foreground_service_notification_chanel_title);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        String description = mContext.getString(R.string.foreground_service_notification_chanel_description);
+
+        NotificationChannel channel = new NotificationChannel(id, name, importance);
+        channel.setDescription(description);
+
+        return channel;
     }
 }
