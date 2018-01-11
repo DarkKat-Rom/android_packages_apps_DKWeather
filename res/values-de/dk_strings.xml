@@ -81,11 +81,9 @@
 	<string name="owm_api_key_dlg_message">Gebe hier den API Key ein, oder lösche den API Key, um den Standard Darkkat API Key zu benutzen.</string>
 	<string name="show_settings_shortcut">Einstellungen-Verknüpfung anzeigen</string>
 
-	<string name="notification_cat_secure_lockscreen_title">Sicherer Sperrbildschirm</string>
 	<string name="show_notification_title">Benachrichtigung anzeigen</string>
 	<string name="notification_show_location_title">Standort anzeigen</string>
 	<string name="notification_show_dk_icon_title">DarkKat Icon anzeigen</string>
-	<string name="notification_show_secure_title">Ausgeblendeten Inhalt anzg.</string>
 
     <!-- CyanogenMod additions -->
 

@@ -45,7 +45,6 @@ public class Config {
     public static final String PREF_KEY_SHOW_NOTIF          = "show_notification";
     public static final String PREF_KEY_NOTIF_SHOW_LOCATION = "notification_show_location";
     public static final String PREF_KEY_NOTIF_SHOW_DK_ICON  = "notification_show_dk_icon";
-    public static final String PREF_KEY_NOTIF_SHOW_SECURE   = "notification_show_secure";
 
     public static final String DEFAULT_OWM_API_KEY = "6d2f4f034d60d9680a720c12df8c7ddd";
 
@@ -221,12 +220,5 @@ public class Config {
                 .getDefaultSharedPreferences(context);
 
         return prefs.getBoolean(PREF_KEY_NOTIF_SHOW_DK_ICON, true);
-    }
-
-    public static boolean getNotificationShowSecure(Context context) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(PREF_KEY_NOTIF_SHOW_SECURE, false);
     }
 }

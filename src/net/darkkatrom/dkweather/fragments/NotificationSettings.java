@@ -32,7 +32,6 @@ public class NotificationSettings extends PreferenceFragment implements
     private SwitchPreference mShow;
     private SwitchPreference mShowLocation;
     private SwitchPreference mShowDKIcon;
-    private SwitchPreference mShowSecure;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,10 +49,6 @@ public class NotificationSettings extends PreferenceFragment implements
         mShowDKIcon =
                 (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_DK_ICON);
         mShowDKIcon.setOnPreferenceChangeListener(this);
-
-        mShowSecure =
-                (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_SECURE);
-        mShowSecure.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -69,7 +64,7 @@ public class NotificationSettings extends PreferenceFragment implements
             }
             return true;
         } else if (preference == mShowLocation
-                    || preference == mShowDKIcon || preference == mShowSecure) {
+                    || preference == mShowDKIcon) {
             updateNotification();
             return true;
         }

@@ -36,15 +36,4 @@
         android:defaultValue="true"
         android:dependency="show_notification" />
 
-    <PreferenceCategory
-        android:key="notification_cat_secure_lockscreen"
-        android:title="@string/notification_cat_secure_lockscreen_title">
-
-        <SwitchPreference
-            android:key="notification_show_secure"
-            android:title="@string/notification_show_secure_title"
-            android:defaultValue="false"
-            android:dependency="show_notification" />
-
-    </PreferenceCategory>
 </PreferenceScreen>

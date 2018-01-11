@@ -73,7 +73,6 @@ public class NotificationUtil {
     private Notification createWeatherNotification() {
         WeatherInfo info =  Config.getWeatherData(mContext);
         boolean showDKIcon =  Config.getNotificationShowDKIcon(mContext);
-        boolean showSecure =  Config.getNotificationShowSecure(mContext);
 
         Notification.Builder builder = new Notification.Builder(mContext, WEATHER_NOTIFICATION_CHANNEL_ID)
             .setShowWhen(true)
@@ -89,10 +88,6 @@ public class NotificationUtil {
             builder.setSmallIcon(R.drawable.ic_dk);
         } else {
             builder.setSmallIcon(textAsSmallIcon(info.getTemperature(), info.getFormattedTemperature()));
-        }
-
-        if (showSecure) {
-            builder.setVisibility(Notification.VISIBILITY_PUBLIC);
         }
 
         return builder.build();
