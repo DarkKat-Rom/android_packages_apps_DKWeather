@@ -73,15 +73,16 @@ public class NotificationUtil {
     private Notification createWeatherNotification() {
         WeatherInfo info =  Config.getWeatherData(mContext);
         boolean showDKIcon =  Config.getNotificationShowDKIcon(mContext);
+        int notificationColor = mContext.getColor(R.color.accent_darkkat);
 
         Notification.Builder builder = new Notification.Builder(mContext, WEATHER_NOTIFICATION_CHANNEL_ID)
             .setShowWhen(true)
             .setWhen(System.currentTimeMillis())
             .setOngoing(true)
             .setStyle(new Notification.DecoratedCustomViewStyle())
-            .setCustomContentView(getCollapsedContent(info))
-            .setCustomBigContentView(getExpandedContent(info))
-            .setColor(0xff009688)
+            .setCustomContentView(getCollapsedContent(info, notificationColor))
+            .setCustomBigContentView(getExpandedContent(info, notificationColor))
+            .setColor(notificationColor)
             .addAction(getSettingsAction());
 
         if (showDKIcon) {
@@ -101,7 +102,7 @@ public class NotificationUtil {
             .setSmallIcon(R.drawable.ic_dk)
             .setContentTitle(mContext.getString(R.string.foreground_service_notification_content_title))
             .setContentText(mContext.getString(R.string.foreground_service_notification_content_text))
-            .setColor(0xff009688);
+            .setColor(mContext.getColor(R.color.accent_darkkat));
         return builder.build();
     }
 
@@ -154,8 +155,8 @@ public class NotificationUtil {
         return Icon.createWithBitmap(b);
     }
 
-    private RemoteViews getCollapsedContent(WeatherInfo info) {
-        Icon icon = getConditionIcon(info.getConditionCode());
+    private RemoteViews getCollapsedContent(WeatherInfo info, int notificationColor) {
+        Icon icon = getConditionIcon(info.getConditionCode(), notificationColor);
         boolean showLocation =  Config.getNotificationShowLocation(mContext);
         String title = info.getFormattedTemperature() + " - " + info.getCondition();
         String text = showLocation ? info.getCity() : "";
@@ -169,7 +170,7 @@ public class NotificationUtil {
         return collapsedContent;
     }
 
-    private RemoteViews getExpandedContent(WeatherInfo info) {
+    private RemoteViews getExpandedContent(WeatherInfo info, int notificationColor) {
         TimeZone myTimezone = TimeZone.getDefault();
         Calendar calendar = new GregorianCalendar(myTimezone);
         ArrayList<DayForecast> forecasts = (ArrayList) info.getForecasts();
@@ -184,7 +185,7 @@ public class NotificationUtil {
             DayForecast d = forecasts.get(i);
             String dayName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT,
                     Locale.getDefault());
-            Icon icon = getConditionIcon(d.getConditionCode());
+            Icon icon = getConditionIcon(d.getConditionCode(), notificationColor);
             String dayTemps = d.getFormattedLow() + " | " + d.getFormattedHigh();
 
             dayContent.setTextViewText(R.id.content_item_day, dayName);
@@ -197,11 +198,11 @@ public class NotificationUtil {
         return expandedContent;
     }
 
-    private Icon getConditionIcon(int conditionCode) {
+    private Icon getConditionIcon(int conditionCode, int notificationColor) {
         int iconResid = mResources.getIdentifier(
                 "weather_" + conditionCode, "drawable", mContext.getPackageName());
         Icon icon = Icon.createWithResource(mContext, iconResid);
-        icon.setTint(0xff009688);
+        icon.setTint(notificationColor);
         return icon;
     }
 
