@@ -37,6 +37,7 @@
     <string name="today_title">Heute</string>
     <string name="update_weather">Wetter aktuallisieren</string>
     <string name="weather_updated">Wetterdaten wurden aktuallisiert</string>
+    <string name="action_bar_no_weather_data_part">, (keine Wetterdaten)</string>
 
     <!-- Weather fragments -->
 	<string name="current_title">Aktuell</string>
@@ -57,6 +58,13 @@
 	<string name="sunset_title">Sonnenuntergang:</string>
 	<string name="expand_card">Mehr anzeigen</string>
 	<string name="collapse_card">Weniger anzeigen</string>
+
+    <!-- No weather data fragment -->
+    <string name="no_weather_data_header">Wetterdaten sind nicht verfügbar!</string>
+    <string name="no_weather_data_title1">Das ist normal:</string>
+    <string name="no_weather_data_title2">Ansonsten:</string>
+    <string name="no_weather_data_summary1">- Beim ersten starten der App\n- Nach dem Zurücksetzen auf Werkseinstellungen\n- Nach dem Löschen der Appdaten\nGehe in die Einstellungen und richte das Wetter (neu) einn</string>
+    <string name="no_weather_data_summary2">- Stelle sicher das Du mit dem Internet verbunden bist\n- Wetter ist aktiviert\n- Standort berechtigung wurde gewährt,\n  (wenn Benutzerdefinierter Standort deaktiviert ist)\n- Standort ist über die Systemeinstellungen aktiviert,\n  (wenn Benutzerdefinierter Standort deaktiviert ist)\n- Du hast einen gültigen Standort gewählt,\n  (wenn Benutzerdefinierter Standort aktiviert ist)</string>
 
     <!-- Bottom navigation bar -->
     <string name="action_previous_day_title">Vorheriger Tag</string>

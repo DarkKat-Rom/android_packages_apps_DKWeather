@@ -37,6 +37,7 @@
     <string name="today_title">Today</string>
     <string name="update_weather">Update Weather</string>
     <string name="weather_updated">Weather data has been updated</string>
+    <string name="action_bar_no_weather_data_part">, (no weather data)</string>
 
     <!-- Weather fragments -->
     <string name="current_title">Current</string>
@@ -57,6 +58,13 @@
     <string name="sunset_title">Sunset:</string>
     <string name="expand_card">Show more</string>
     <string name="collapse_card">Show less</string>
+
+    <!-- No weather data fragment -->
+    <string name="no_weather_data_header">Weather data is not available!</string>
+    <string name="no_weather_data_title1">This is normal:</string>
+    <string name="no_weather_data_title2">Otherwise:</string>
+    <string name="no_weather_data_summary1">- On first app start\n- After factory reset\n- After wiping app data\nGo to settings and (re)setup the weather</string>
+    <string name="no_weather_data_summary2">- Make sure you are connected to the internet\n- Weather is enabled\n- Location permission was granted,\n  (when custom location is disabled)\n- Location is enabled via system settings,\n  (when custom location is disabled)\n- You set a valid location,\n  (when custom location is enabled)</string>
 
     <!-- Bottom navigation bar -->
     <string name="action_previous_day_title">Previous day</string>

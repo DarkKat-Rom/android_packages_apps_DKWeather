@@ -46,6 +46,7 @@ import net.darkkatrom.dkweather.WeatherService;
 import net.darkkatrom.dkweather.fragments.WeatherFragment;
 import net.darkkatrom.dkweather.fragments.CurrentWeatherFragment;
 import net.darkkatrom.dkweather.fragments.ForecastWeatherFragment;
+import net.darkkatrom.dkweather.fragments.NoWeatherDataFragment;
 import net.darkkatrom.dkweather.fragments.SettingsFragment;
 import net.darkkatrom.dkweather.utils.Config;
 
@@ -109,19 +110,19 @@ public class MainActivity extends BaseActivity implements
 
         @Override
         public void onChange(boolean selfChange) {
-            if (getWeather() == null) {
-                Log.e(TAG, "Error retrieving forecast data");
+            mWeatherInfo = getWeather();
+            if (mWeatherInfo == null) {
+                Log.e(TAG, "Error retrieving weather data");
                 if (mUpdateRequested) {
                     mUpdateRequested = false;
                 }
             } else {
-                mWeatherInfo = getWeather();
-                updateContent();
                 if (mUpdateRequested) {
                     showToast(R.string.weather_updated);
                     mUpdateRequested = false;
                 }
             }
+            updateContent();
         }
     }
 
@@ -135,17 +136,14 @@ public class MainActivity extends BaseActivity implements
         mHandler = new Handler();
         mResolver = getContentResolver();
         mWeatherObserver = new WeatherObserver(mHandler);
+        mWeatherInfo = getWeather();
 
         createOrRestoreState(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
         updateActionBar();
         setupBottomNavigation();
 
-        mWeatherInfo = getWeather();
-
         if (savedInstanceState == null) {
-            if (mWeatherInfo != null) {
-                replaceFragment();
-            }
+            replaceFragment();
         }
     }
 
@@ -223,8 +221,10 @@ public class MainActivity extends BaseActivity implements
                 mActionBarSubTitles[i] = WeatherInfo.getFormattedDate(calendar.getTime(), false);
             }
         }
+        String noWeatherDataPart = mWeatherInfo == null
+                ? getResources().getString(R.string.action_bar_no_weather_data_part) : "";
 
-        getActionBar().setSubtitle(mActionBarSubTitles[mVisibleScreen]);
+        getActionBar().setSubtitle(mActionBarSubTitles[mVisibleScreen] + noWeatherDataPart);
     }
 
     private void setupBottomNavigation() {
@@ -254,10 +254,10 @@ public class MainActivity extends BaseActivity implements
 
     private void updateBottomNavigationItemState() {
         mNavigationButtonPreviousDay.setEnabled(mVisibleScreen > TODAY
-                && mVisibleScreen != SETTINGS);
+                && mVisibleScreen != SETTINGS && mWeatherInfo != null);
         mNavigationButtonSettings.setSelected(mVisibleScreen == SETTINGS);
         mNavigationButtonSettings.setEnabled(mVisibleScreen != SETTINGS);
-        mNavigationButtonNextDay.setEnabled(mVisibleScreen < LAST_DAY);
+        mNavigationButtonNextDay.setEnabled(mVisibleScreen < LAST_DAY && mWeatherInfo != null);
     }
 
     @Override
@@ -295,12 +295,18 @@ public class MainActivity extends BaseActivity implements
     }
 
     private Fragment getFragmentForVisibleScreen() {
-        if (mVisibleScreen == TODAY) {
-            return getCurrentWeatherFragment();
-        } else if (mVisibleScreen == SETTINGS) {
+        if (mVisibleScreen == SETTINGS) {
             return getSettingsFragment();
         } else {
-            return getForecastWeatherFragment();
+            if (mWeatherInfo == null) { 
+                return new NoWeatherDataFragment();
+            } else {
+                if (mVisibleScreen == TODAY) {
+                    return getCurrentWeatherFragment();
+                } else {
+                    return getForecastWeatherFragment();
+                }
+            }
         }
     }
 
@@ -329,6 +335,7 @@ public class MainActivity extends BaseActivity implements
     private void updateContent() {
         updateActionBar();
         replaceFragment();
+        updateBottomNavigationItemState();
     }
 
     @Override
@@ -353,9 +360,7 @@ public class MainActivity extends BaseActivity implements
             mVisibleScreen++;
             mDayIndex++;
         }
-        updateActionBar();
-        replaceFragment();
-        updateBottomNavigationItemState();
+        updateContent();
     }
 
     @Override
@@ -420,9 +425,8 @@ public class MainActivity extends BaseActivity implements
                 mDayIndex = mVisibleScreen;
             }
             if (mVisibleScreen != SETTINGS) {
-                updateActionBar();
-                replaceFragment();
-                updateBottomNavigationItemState();
+                mWeatherInfo = getWeather();
+                updateContent();
             }
         } else {
             finish();

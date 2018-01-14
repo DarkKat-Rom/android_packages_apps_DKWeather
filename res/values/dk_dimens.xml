@@ -18,6 +18,18 @@
     <!-- Actionbar -->
     <dimen name="actionbar_update_button_size">48dp</dimen>
 
+    <!-- No weather data fragment -->
+    <dimen name="no_weather_data_layout_padding_start_top_end">16dp</dimen>
+    <dimen name="no_weather_data_layout_landscape_padding_bottom">8dp</dimen>
+    <dimen name="no_weather_data_image_size">72dp</dimen>
+    <dimen name="no_weather_data_image_portrait_margin_top">16dp</dimen>
+    <dimen name="no_weather_data_image_landscape_margin_start">16dp</dimen>
+    <dimen name="no_weather_data_image_landscape_margin_end">32dp</dimen>
+    <dimen name="no_weather_data_text_margin_top">8dp</dimen>
+    <dimen name="no_weather_data_scroll_view_landscape_margin_top">8dp</dimen>
+    <dimen name="no_weather_data_fading_edge_landscape_length">12dp</dimen>
+
+
     <!-- Weather fragments -->
     <dimen name="detailed_weather_fading_edge_length">12dp</dimen>
     <dimen name="detailed_weather_cards_layout_padding_top_bottom">4dp</dimen>
