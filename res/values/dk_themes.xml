@@ -16,13 +16,13 @@
 <resources>
 
     <!-- App splash theme -->
-    <style name="AppSplashTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="AppSplashTheme" parent="@android:style/Theme.Material.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_bg</item>
         <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
     </style>
 
     <!-- App theme -->
-    <style name="AppTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="@android:style/Theme.Material.DayNight.DarkActionBar">
         <item name="android:colorPrimary">@color/theme_primary</item>
         <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="android:colorAccent">@color/theme_accent</item>
