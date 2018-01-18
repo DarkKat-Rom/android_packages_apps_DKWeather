@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import com.android.internal.util.darkkat.ThemeOverlayHelper;
+import com.android.internal.util.darkkat.ThemeHelper;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
@@ -148,10 +148,10 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void updateTheme() {
-        mUseOptionalLightStatusBar = ThemeOverlayHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeOverlayHelper.useLightStatusBar(this);
-        mUseOptionalLightNavigationBar = ThemeOverlayHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeOverlayHelper.useLightNavigationBar(this);
+        mUseOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeHelper.useLightStatusBar(this);
+        mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeHelper.useLightNavigationBar(this);
         int themeResId = 0;
 
         if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
@@ -170,7 +170,7 @@ public class MainActivity extends BaseActivity implements
         if (!mUseOptionalLightStatusBar) {
             // Possibly we are using the Whiteout theme
             boolean isWhiteoutTheme =
-                    ThemeOverlayHelper.getThemeOverlay(this) == ThemeOverlayHelper.THEME_OVERLAY_WHITEOUT;
+                    ThemeHelper.getTheme(this) == UiModeManager.MODE_NIGHT_NO_WHITEOUT;
             boolean isLightStatusBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             // Check if light status bar flag was set,
@@ -264,10 +264,10 @@ public class MainActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
-        boolean useOptionalLightStatusBar = ThemeOverlayHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeOverlayHelper.useLightStatusBar(this);
-        boolean useOptionalLightNavigationBar = ThemeOverlayHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeOverlayHelper.useLightNavigationBar(this);
+        boolean useOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeHelper.useLightStatusBar(this);
+        boolean useOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeHelper.useLightNavigationBar(this);
         if (mUseOptionalLightStatusBar != useOptionalLightStatusBar
                 || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
             recreate();
