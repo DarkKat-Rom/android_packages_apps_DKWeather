@@ -38,7 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OpenWeatherMapProvider extends AbstractWeatherProvider {
-    private static final String TAG = "OpenWeatherMapProvider";
+    private static final String TAG = "DKWeather:OpenWeatherMapProvider";
 
     private static final int FORECAST_DAYS = 5;
     private static final String SELECTION_LOCATION = "lat=%f&lon=%f";
@@ -85,7 +85,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
 
             return results;
         } catch (JSONException e) {
-            Log.w(TAG, "Received malformed location data (input=" + input + ")", e);
+            Log.e(TAG, "Received malformed location data (input=" + input + ")", e);
         }
 
         return null;
@@ -166,7 +166,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             log(TAG, "Weather updated: " + w);
             return w;
         } catch (JSONException e) {
-            Log.w(TAG, "Received malformed weather data (selection = " + selection
+            Log.e(TAG, "Received malformed weather data (selection = " + selection
                     + ", lang = " + locale + ")", e);
         }
 

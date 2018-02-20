@@ -48,7 +48,7 @@ import net.darkkatrom.dkweather.utils.NotificationUtil;
 import net.darkkatrom.dkweather.utils.ShortcutUtil;
 
 public class WeatherService extends Service {
-    private static final String TAG = "WeatherService";
+    private static final String TAG = "DKWeather:WeatherService";
     private static final boolean DEBUG = false;
     private static final String ACTION_UPDATE = "net.darkkatrom.dkweather.ACTION_UPDATE";
     private static final String ACTION_ALARM = "net.darkkatrom.dkweather.ACTION_ALARM";
@@ -145,7 +145,7 @@ public class WeatherService extends Service {
         }
 
         if (ACTION_NOTIFICATION.equals(intent.getAction())) {
-            Log.w(TAG, "Update notification");
+            if (DEBUG) Log.d(TAG, "Update notification");
             mNotificationUtil.sendNotification();
             stopForeground(true);
             return START_REDELIVER_INTENT;
@@ -160,7 +160,7 @@ public class WeatherService extends Service {
         }
 
         if (!isNetworkAvailable()) {
-            if (DEBUG) Log.d(TAG, "Service started, but no network ... stopping");
+            Log.w(TAG, "Service started, but no network ... stopping");
             stopForeground(true);
             stopSelf();
             return START_NOT_STICKY;
@@ -172,7 +172,7 @@ public class WeatherService extends Service {
                 final long now = System.currentTimeMillis();
                 final long updateInterval = ALARM_INTERVAL_BASE * Config.getUpdateInterval(this);
                 if (lastUpdate + updateInterval > now) {
-                    if (DEBUG)  Log.d(TAG, "Service started, but update not due ... stopping");
+                    Log.w(TAG, "Service started, but update not due ... stopping");
                     stopForeground(true);
                     stopSelf();
                     return START_NOT_STICKY;
