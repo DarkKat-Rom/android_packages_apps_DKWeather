@@ -31,14 +31,14 @@ import android.util.Log;
 
 class WeatherLocationListener implements LocationListener {
     private static final String TAG = "DKWeather:WeatherLocationListener";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private Context mContext;
     private PendingIntent mTimeoutIntent;
     private static WeatherLocationListener sInstance = null;
 
     static void registerIfNeeded(Context context, String provider) {
         synchronized (WeatherLocationListener.class) {
-            Log.d(TAG, "Registering location listener");
+            if (DEBUG) Log.d(TAG, "Registering location listener");
             if (sInstance == null) {
                 final Context appContext = context.getApplicationContext();
                 final LocationManager locationManager =
@@ -53,7 +53,7 @@ class WeatherLocationListener implements LocationListener {
                 // change this if this call receive different providers
                 LocationProvider lp = locationManager.getProvider(provider);
                 if (lp != null) {
-                    Log.d(TAG, "LocationManager - Requesting single update");
+                    if (DEBUG) Log.d(TAG, "LocationManager - Requesting single update");
                     locationManager.requestSingleUpdate(provider, sInstance,
                             appContext.getMainLooper());
                     sInstance.setTimeoutAlarm();
@@ -68,7 +68,7 @@ class WeatherLocationListener implements LocationListener {
                 final Context appContext = context.getApplicationContext();
                 final LocationManager locationManager =
                     (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
-                Log.d(TAG, "Aborting location request after timeout");
+                Log.w(TAG, "Aborting location request after timeout");
                 locationManager.removeUpdates(sInstance);
                 sInstance.cancelTimeoutAlarm();
                 sInstance = null;
@@ -104,7 +104,7 @@ class WeatherLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         // Now, we have a location to use. Schedule a weather update right now.
-        Log.d(TAG, "The location has changed, schedule an update ");
+        if (DEBUG) Log.d(TAG, "The location has changed, schedule an update ");
         synchronized (WeatherLocationListener.class) {
             WeatherService.startUpdate(mContext, true);
             cancelTimeoutAlarm();
@@ -115,7 +115,7 @@ class WeatherLocationListener implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // Now, we have a location to use. Schedule a weather update right now.
-        Log.d(TAG, "The location service has become available, schedule an update ");
+        if (DEBUG) Log.d(TAG, "The location service has become available, schedule an update ");
         if (status == LocationProvider.AVAILABLE) {
             synchronized (WeatherLocationListener.class) {
                 WeatherService.startUpdate(mContext, true);

@@ -58,7 +58,7 @@ import java.util.TimeZone;
 public class MainActivity extends BaseActivity implements
         OnClickListener, OnLongClickListener {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "DKWeather:MainActivity";
 
     private static final Uri WEATHER_URI =
             Uri.parse("content://net.darkkatrom.dkweather.provider/weather");

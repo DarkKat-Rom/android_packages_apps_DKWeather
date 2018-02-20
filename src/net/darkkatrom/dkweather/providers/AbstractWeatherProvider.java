@@ -34,7 +34,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 public abstract class AbstractWeatherProvider {
-    private static final String TAG = "AbstractWeatherProvider";
+    private static final String TAG = "DKWeather:AbstractWeatherProvider";
     private static final boolean DEBUG = false;
     protected Context mContext;
 

@@ -154,7 +154,7 @@ public class WeatherContentProvider extends ContentProvider {
         final int projectionType = sUriMatcher.match(uri);
         final MatrixCursor result = new MatrixCursor(resolveProjection(projection, projectionType));
 
-        if (DEBUG) Log.i(TAG, "query: " + uri.toString());
+        if (DEBUG) Log.d(TAG, "query: " + uri.toString());
 
         if (projectionType == URI_TYPE_SETTINGS) {
             result.newRow()
