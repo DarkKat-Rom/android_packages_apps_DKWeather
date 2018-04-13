@@ -26,6 +26,7 @@ import android.util.Log;
 
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherInfo.DayForecast;
+import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
 import net.darkkatrom.dkweather.utils.Config;
 
 public class WeatherContentProvider extends ContentProvider {
@@ -37,6 +38,12 @@ public class WeatherContentProvider extends ContentProvider {
     private static final int URI_TYPE_WEATHER = 1;
     private static final int URI_TYPE_SETTINGS = 2;
 
+    private static final int TYPE_CURRENT_WEATHER = 1;
+    private static final int TYPE_DAYFORECAST = 2;
+    private static final int TYPE_HOURFORECAST = 3;
+
+    private static final String COLUMN_TYPE =
+            "type";
     private static final String COLUMN_CURRENT_CITY_ID =
             "city_id";
     private static final String COLUMN_CURRENT_CITY =
@@ -71,19 +78,52 @@ public class WeatherContentProvider extends ContentProvider {
             "formatted_snow3h";
     private static final String COLUMN_CURRENT_TIME_STAMP =
             "time_stamp";
+    private static final String COLUMN_CURRENT_SUNRISE =
+            "sunrise";
+    private static final String COLUMN_CURRENT_SUNSET =
+            "sunset";
 
-    private static final String COLUMN_FORECAST_CONDITION =
-            "forecast_condition";
-    private static final String COLUMN_FORECAST_CONDITION_CODE =
-            "forecast_condition_code";
-    private static final String COLUMN_FORECAST_TEMPERATURE_LOW =
-            "forecast_temperature_low";
-    private static final String COLUMN_FORECAST_TEMPERATURE_HIGH =
-            "forecast_temperature_high";
-    private static final String COLUMN_FORECAST_FORMATTED_TEMPERATURE_LOW =
-            "forecast_formatted_temperature_low";
-    private static final String COLUMN_FORECAST_FORMATTED_TEMPERATURE_HIGH =
-            "forecast_formatted_temperature_high";
+    private static final String COLUMN_DAYFORECAST_CONDITION =
+            "dayforecast_condition";
+    private static final String COLUMN_DAYFORECAST_CONDITION_CODE =
+            "dayforecast_condition_code";
+    private static final String COLUMN_DAYFORECAST_TEMPERATURE_LOW =
+            "dayforecast_temperature_low";
+    private static final String COLUMN_DAYFORECAST_TEMPERATURE_HIGH =
+            "dayforecast_temperature_high";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_LOW =
+            "dayforecast_formatted_temperature_low";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_HIGH =
+            "dayforecast_formatted_temperature_high";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_MORNING =
+            "dayforecast_formatted_temperature_morning";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_DAY =
+            "dayforecast_formatted_temperature_day";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_EVENING =
+            "dayforecast_formatted_temperature_evening";
+    private static final String COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_NIGHT =
+            "dayforecast_formatted_temperature_night";
+
+    private static final String COLUMN_HOURFORECAST_CONDITION =
+            "hourforecast_condition";
+    private static final String COLUMN_HOURFORECAST_CONDITION_CODE =
+            "hourforecast_condition_code";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_TEMPERATURE =
+            "hourforecast_formatted_temperature";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_HUMIDITY =
+            "hourforecast_formatted_humidity";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_WIND =
+            "hourforecast_formatted_wind";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_PRESSURE =
+            "hourforecast_formatted_pressure";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_RAIN =
+            "hourforecast_formatted_rain";
+    private static final String COLUMN_HOURFORECAST_FORMATTED_SNOW =
+            "hourforecast_formatted_snow";
+    private static final String COLUMN_HOURFORECAST_TIME =
+            "hourforecast_time";
+    private static final String COLUMN_HOURFORECAST_DAY =
+            "hourforecast_day";
 
     private static final String COLUMN_ENABLED = "enabled";
     private static final String COLUMN_PROVIDER = "provider";
@@ -92,6 +132,7 @@ public class WeatherContentProvider extends ContentProvider {
     private static final String COLUMN_LOCATION = "location";
 
     private static final String[] PROJECTION_DEFAULT_WEATHER = new String[] {
+            COLUMN_TYPE,
             COLUMN_CURRENT_CITY_ID,
             COLUMN_CURRENT_CITY,
             COLUMN_CURRENT_CONDITION,
@@ -109,12 +150,28 @@ public class WeatherContentProvider extends ContentProvider {
             COLUMN_CURRENT_FORMATTED_SNOW1H,
             COLUMN_CURRENT_FORMATTED_SNOW3H,
             COLUMN_CURRENT_TIME_STAMP,
-            COLUMN_FORECAST_CONDITION,
-            COLUMN_FORECAST_CONDITION_CODE,
-            COLUMN_FORECAST_TEMPERATURE_LOW,
-            COLUMN_FORECAST_TEMPERATURE_HIGH,
-            COLUMN_FORECAST_FORMATTED_TEMPERATURE_LOW,
-            COLUMN_FORECAST_FORMATTED_TEMPERATURE_HIGH
+            COLUMN_CURRENT_SUNRISE,
+            COLUMN_CURRENT_SUNSET,
+            COLUMN_DAYFORECAST_CONDITION,
+            COLUMN_DAYFORECAST_CONDITION_CODE,
+            COLUMN_DAYFORECAST_TEMPERATURE_LOW,
+            COLUMN_DAYFORECAST_TEMPERATURE_HIGH,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_LOW,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_HIGH,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_MORNING,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_DAY,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_EVENING,
+            COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_NIGHT,
+            COLUMN_HOURFORECAST_CONDITION,
+            COLUMN_HOURFORECAST_CONDITION_CODE,
+            COLUMN_HOURFORECAST_FORMATTED_TEMPERATURE,
+            COLUMN_HOURFORECAST_FORMATTED_HUMIDITY,
+            COLUMN_HOURFORECAST_FORMATTED_WIND,
+            COLUMN_HOURFORECAST_FORMATTED_PRESSURE,
+            COLUMN_HOURFORECAST_FORMATTED_RAIN,
+            COLUMN_HOURFORECAST_FORMATTED_SNOW,
+            COLUMN_HOURFORECAST_TIME,
+            COLUMN_HOURFORECAST_DAY
     };
 
     private static final String[] PROJECTION_DEFAULT_SETTINGS = new String[] {
@@ -170,6 +227,7 @@ public class WeatherContentProvider extends ContentProvider {
             if (weather != null) {
                 // current
                 result.newRow()
+                        .add(COLUMN_TYPE, TYPE_CURRENT_WEATHER)
                         .add(COLUMN_CURRENT_CITY_ID, weather.getId())
                         .add(COLUMN_CURRENT_CITY, weather.getCity())
                         .add(COLUMN_CURRENT_CONDITION, weather.getCondition())
@@ -186,18 +244,40 @@ public class WeatherContentProvider extends ContentProvider {
                         .add(COLUMN_CURRENT_FORMATTED_RAIN3H, weather.getFormattedRain3H())
                         .add(COLUMN_CURRENT_FORMATTED_SNOW1H, weather.getFormattedSnow1H())
                         .add(COLUMN_CURRENT_FORMATTED_SNOW3H, weather.getFormattedSnow3H())
-                        .add(COLUMN_CURRENT_TIME_STAMP, weather.getDate().toString());
+                        .add(COLUMN_CURRENT_TIME_STAMP, weather.getDate().toString())
+                        .add(COLUMN_CURRENT_SUNRISE, weather.getSunrise())
+                        .add(COLUMN_CURRENT_SUNSET, weather.getSunset());
 
-
-                // forecast
+                // dayforecast
                 for (DayForecast day : weather.getForecasts()) {
                     result.newRow()
-                            .add(COLUMN_FORECAST_CONDITION, day.getCondition())
-                            .add(COLUMN_FORECAST_CONDITION_CODE, day.getConditionCode())
-                            .add(COLUMN_FORECAST_TEMPERATURE_LOW, day.getLow())
-                            .add(COLUMN_FORECAST_TEMPERATURE_HIGH, day.getHigh())
-                            .add(COLUMN_FORECAST_FORMATTED_TEMPERATURE_LOW, day.getFormattedLow())
-                            .add(COLUMN_FORECAST_FORMATTED_TEMPERATURE_HIGH, day.getFormattedHigh());
+                            .add(COLUMN_TYPE, TYPE_DAYFORECAST)
+                            .add(COLUMN_DAYFORECAST_CONDITION, day.getCondition())
+                            .add(COLUMN_DAYFORECAST_CONDITION_CODE, day.getConditionCode())
+                            .add(COLUMN_DAYFORECAST_TEMPERATURE_LOW, day.getLow())
+                            .add(COLUMN_DAYFORECAST_TEMPERATURE_HIGH, day.getHigh())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_LOW, day.getFormattedLow())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_HIGH, day.getFormattedHigh())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_MORNING, day.getFormattedMorning())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_DAY, day.getFormattedDay())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_EVENING, day.getFormattedEvening())
+                            .add(COLUMN_DAYFORECAST_FORMATTED_TEMPERATURE_NIGHT, day.getFormattedNight());
+                }
+
+                // hourforecast
+                for (HourForecast hour : weather.getHourForecasts()) {
+                    result.newRow()
+                            .add(COLUMN_TYPE, TYPE_HOURFORECAST)
+                            .add(COLUMN_HOURFORECAST_CONDITION, hour.getCondition())
+                            .add(COLUMN_HOURFORECAST_CONDITION_CODE, hour.getConditionCode())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_TEMPERATURE, hour.getFormattedTemperature())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_HUMIDITY, hour.getFormattedHumidity())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_WIND, hour.getFormattedWind())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_PRESSURE, hour.getFormattedPressure())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_RAIN, hour.getFormattedRain())
+                            .add(COLUMN_HOURFORECAST_FORMATTED_SNOW, hour.getFormattedSnow())
+                            .add(COLUMN_HOURFORECAST_DAY, hour.getDay())
+                            .add(COLUMN_HOURFORECAST_TIME, hour.getTime());
                 }
                 return result;
             }
