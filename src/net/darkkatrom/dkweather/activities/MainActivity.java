@@ -340,6 +340,7 @@ public class MainActivity extends BaseActivity implements
         updateActionBar();
         replaceFragment();
         updateBottomNavigationItemState();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -352,6 +353,12 @@ public class MainActivity extends BaseActivity implements
         updateButtonLayout.setOnClickListener(this);
         updateButtonLayout.setOnLongClickListener(this);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.item_update).setVisible(mVisibleScreen != SETTINGS);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public void onBottomNavigationItemClick(View v) {
