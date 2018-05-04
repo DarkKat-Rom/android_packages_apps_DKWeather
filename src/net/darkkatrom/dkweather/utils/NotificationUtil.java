@@ -156,7 +156,7 @@ public class NotificationUtil {
     private RemoteViews getExpandedContent(WeatherInfo info, int notificationColor) {
         TimeZone myTimezone = TimeZone.getDefault();
         Calendar calendar = new GregorianCalendar(myTimezone);
-        ArrayList<DayForecast> forecasts = (ArrayList) info.getForecasts();
+        ArrayList<DayForecast> forecasts = info.getForecasts();
         RemoteViews expandedContent = new RemoteViews(mContext.getPackageName(),
                 R.layout.notification_expanded_content);
 
