@@ -23,15 +23,9 @@
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Disabled</string>
 
-    <!-- Notifications -->
-    <string name="foreground_service_notification_content_title">WeatherService</string>
-    <string name="foreground_service_notification_content_text">WeatherService is running in the foreground</string>
-
     <!-- Notification channels -->
     <string name="weather_notification_chanel_title">Weather</string>
     <string name="weather_notification_chanel_description">Category used for the ongoing weather notification</string>
-    <string name="foreground_service_notification_chanel_title">WeatherService</string>
-    <string name="foreground_service_notification_chanel_description">Category used for WeatherService notifications</string>
 
     <!-- Actionbar -->
     <string name="today_title">Today</string>

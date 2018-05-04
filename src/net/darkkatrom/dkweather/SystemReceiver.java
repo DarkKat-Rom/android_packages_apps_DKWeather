@@ -20,10 +20,10 @@ package net.darkkatrom.dkweather;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.util.Log;
 
 import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.JobUtil;
 
 public class SystemReceiver extends BroadcastReceiver {
     private static final String TAG = "DKWeather:SystemReceiver";
@@ -37,13 +37,14 @@ public class SystemReceiver extends BroadcastReceiver {
                 if (DEBUG) Log.d(TAG, "boot completed");
                 Config.clearLastUpdateTime(context);
                 // kick updates
-                WeatherService.scheduleUpdate(context);
+                JobUtil.startUpdate(context);
+                JobUtil.scheduleUpdate(context);
             }
         } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
             if (Config.isEnabled(context)) {
                 if (DEBUG) Log.d(TAG, "locale changed");
                 // kick updates
-                WeatherService.startUpdate(context, true);
+                JobUtil.startUpdate(context);
             }
         }
     }

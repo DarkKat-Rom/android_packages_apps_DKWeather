@@ -1,19 +1,17 @@
 /*
- *  Copyright (C) 2015 The OmniROM Project
+ * Copyright (C) 2017 DarkKat
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package net.darkkatrom.dkweather.utils;
 
@@ -50,12 +48,9 @@ import java.util.TimeZone;
 
 public class NotificationUtil {
     public static final int WEATHER_NOTIFICATION_ID            = 1;
-    public static final int FOREGROUND_SERVICE_NOTIFICATION_ID = 2;
 
     public static final String WEATHER_NOTIFICATION_CHANNEL_ID =
             "weather_notification_chanel";
-    public static final String FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID =
-            "foreground_service_notification_chanel";
 
     private final Context mContext;
     private final Resources mResources;
@@ -91,18 +86,6 @@ public class NotificationUtil {
             builder.setSmallIcon(textAsSmallIcon(info.getTemperature(), info.getFormattedTemperature()));
         }
 
-        return builder.build();
-    }
-
-    public Notification getForegroundNotification() {
-        Notification.Builder builder = new Notification.Builder(
-                mContext, FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID)
-            .setShowWhen(true)
-            .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_dk)
-            .setContentTitle(mContext.getString(R.string.foreground_service_notification_content_title))
-            .setContentText(mContext.getString(R.string.foreground_service_notification_content_text))
-            .setColor(mContext.getColor(R.color.accent_darkkat));
         return builder.build();
     }
 
@@ -237,21 +220,13 @@ public class NotificationUtil {
     public void setNotificationChannels() {
         NotificationManager notificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        List<NotificationChannel> channels = new ArrayList<NotificationChannel>();
-        NotificationChannel channel1 = getWeatherNotificationChannel();
-        NotificationChannel channel2 = getForegroundServiceNotificationChannel();
+        NotificationChannel channel = getWeatherNotificationChannel();
 
-        channel1.setSound(null, null);
-        channel2.setSound(null, null);
-        channel1.enableLights(false);
-        channel2.enableLights(false);
-        channel1.enableVibration(false);
-        channel2.enableVibration(false);
+        channel.setSound(null, null);
+        channel.enableLights(false);
+        channel.enableVibration(false);
 
-        channels.add(channel1);
-        channels.add(channel2);
-
-        notificationManager.createNotificationChannels(channels);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private NotificationChannel getWeatherNotificationChannel() {
@@ -266,15 +241,8 @@ public class NotificationUtil {
         return channel;
     }
 
-    private NotificationChannel getForegroundServiceNotificationChannel() {
-        String id = FOREGROUND_SERVICE_NOTIFICATION_CHANNEL_ID;
-        CharSequence name = mContext.getString(R.string.foreground_service_notification_chanel_title);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        String description = mContext.getString(R.string.foreground_service_notification_chanel_description);
-
-        NotificationChannel channel = new NotificationChannel(id, name, importance);
-        channel.setDescription(description);
-
-        return channel;
+    public static void removeNotification(Context context) {
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
+                .cancel(WEATHER_NOTIFICATION_ID);
     }
 }

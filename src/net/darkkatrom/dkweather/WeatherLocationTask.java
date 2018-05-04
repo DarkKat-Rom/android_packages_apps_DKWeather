@@ -26,11 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import net.darkkatrom.dkweather.utils.Config;

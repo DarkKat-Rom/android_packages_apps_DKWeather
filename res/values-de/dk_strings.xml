@@ -23,15 +23,9 @@
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Deaktiviert</string>
 
-    <!-- Notifications -->
-    <string name="foreground_service_notification_content_title">WeatherService</string>
-    <string name="foreground_service_notification_content_text">WeatherService läuft derzeit im Vordergrund</string>
-
     <!-- Notification channels -->
     <string name="weather_notification_chanel_title">Wetter</string>
     <string name="weather_notification_chanel_description">Kategorie für die laufende Wetter Benachrichtigung</string>
-    <string name="foreground_service_notification_chanel_title">WeatherService</string>
-    <string name="foreground_service_notification_chanel_description">Kategorie für WeatherService Benachrichtigungen</string>
 
     <!-- Actionbar -->
     <string name="today_title">Heute</string>

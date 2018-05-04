@@ -16,18 +16,20 @@
 
 package net.darkkatrom.dkweather.fragments;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 
 import net.darkkatrom.dkweather.R;
-import net.darkkatrom.dkweather.WeatherService;
 import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.NotificationUtil;
 
 public class NotificationSettings extends PreferenceFragment implements
-        OnPreferenceChangeListener {
+        OnSharedPreferenceChangeListener {
 
     private SwitchPreference mShow;
     private SwitchPreference mShowLocation;
@@ -38,40 +40,34 @@ public class NotificationSettings extends PreferenceFragment implements
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.notification_settings);
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .registerOnSharedPreferenceChangeListener(this);
 
         mShow = (SwitchPreference) findPreference(Config.PREF_KEY_SHOW_NOTIF);
-        mShow.setOnPreferenceChangeListener(this);
 
         mShowLocation =
                 (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_LOCATION);
-        mShowLocation.setOnPreferenceChangeListener(this);
 
         mShowDKIcon =
                 (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_DK_ICON);
-        mShowDKIcon.setOnPreferenceChangeListener(this);
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        boolean value;
-
-        if (preference == mShow) {
-            value = (Boolean) newValue;
-            if (value) {
-                updateNotification();
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key == mShow.getKey()) {
+            if (mShow.isChecked()) {
+                sendNotification();
             } else {
-                WeatherService.removeNotification(getActivity());
+                NotificationUtil.removeNotification(getActivity());
             }
-            return true;
-        } else if (preference == mShowLocation
-                    || preference == mShowDKIcon) {
-            updateNotification();
-            return true;
+        } else if (key == mShowLocation.getKey()
+                    || key == mShowDKIcon.getKey()) {
+            sendNotification();
         }
-        return false;
     }
 
-    private void updateNotification() {
-        WeatherService.startNotificationUpdate(getActivity());
+    private void sendNotification() {
+        NotificationUtil notificationUtil = new NotificationUtil(getActivity());
+        notificationUtil.sendNotification();
     }
 }

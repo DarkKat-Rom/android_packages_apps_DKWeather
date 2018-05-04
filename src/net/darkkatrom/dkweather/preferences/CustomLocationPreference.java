@@ -16,28 +16,22 @@
 
 package net.darkkatrom.dkweather.preferences;
 
-import java.util.HashSet;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherLocationTask;
-import net.darkkatrom.dkweather.WeatherService;
 import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.JobUtil;
 
 public class CustomLocationPreference extends EditTextPreference implements WeatherLocationTask.Callback {
     private AlertDialog mDialog;
@@ -110,6 +104,6 @@ public class CustomLocationPreference extends EditTextPreference implements Weat
         setText(result.city);
         mDialog.dismiss();
         setSummary(result.city);
-        WeatherService.startUpdate(getContext(), true);
+        JobUtil.startUpdate(getContext());
     }
 }

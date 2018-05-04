@@ -37,10 +37,10 @@ import android.provider.Settings;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherLocationTask;
-import net.darkkatrom.dkweather.WeatherService;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.preferences.CustomLocationPreference;
 import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.JobUtil;
 
 public class SettingsFragment extends PreferenceFragment implements
         OnPreferenceChangeListener, WeatherLocationTask.Callback  {
@@ -130,7 +130,8 @@ public class SettingsFragment extends PreferenceFragment implements
                     mTriggerUpdate = true;
                     checkLocationEnabled();
                 } else {
-                    WeatherService.scheduleUpdate(getActivity());
+                    JobUtil.startUpdate(getActivity());
+                    JobUtil.scheduleUpdate(getActivity());
                 }
             } else {
                 disableService();
@@ -140,7 +141,7 @@ public class SettingsFragment extends PreferenceFragment implements
             intValue = Integer.valueOf((String) newValue);
             index = mUpdateInterval.findIndexOfValue((String) newValue);
             preference.setSummary(mUpdateInterval.getEntries()[index]);
-            WeatherService.scheduleUpdate(getActivity());
+            JobUtil.scheduleUpdate(getActivity());
             return true;
         } else if (preference == mOWMApiKey) {
             String stringValue = (String) newValue;
@@ -154,7 +155,7 @@ public class SettingsFragment extends PreferenceFragment implements
             intValue = Integer.valueOf((String) newValue);
             index = mUnits.findIndexOfValue((String) newValue);
             preference.setSummary(mUnits.getEntries()[index]);
-            WeatherService.startUpdate(getActivity(), true);
+            JobUtil.startUpdate(getActivity());
             return true;
         } else if (preference == mCustomLocation) {
             value = (Boolean) newValue;
@@ -210,7 +211,8 @@ public class SettingsFragment extends PreferenceFragment implements
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         } else {
             if (mTriggerUpdate) {
-                WeatherService.scheduleUpdate(getActivity());
+                JobUtil.startUpdate(getActivity());
+                JobUtil.scheduleUpdate(getActivity());
                 mTriggerUpdate = false;
             }
         }
@@ -233,7 +235,8 @@ public class SettingsFragment extends PreferenceFragment implements
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (mTriggerUpdate) {
-                        WeatherService.scheduleUpdate(getActivity());
+                        JobUtil.startUpdate(getActivity());
+                        JobUtil.scheduleUpdate(getActivity());
                         mTriggerUpdate = false;
                     }
                 }
@@ -244,8 +247,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     private void disableService() {
         // stop any pending
-        WeatherService.cancelUpdate(getActivity());
-        WeatherService.removeNotification(getActivity());
+        JobUtil.disableService(getActivity());
     }
 
     @Override
@@ -254,6 +256,6 @@ public class SettingsFragment extends PreferenceFragment implements
         Config.setLocationName(getActivity(), result.city);
         mLocation.setText(result.city);
         mLocation.setSummary(result.city);
-        WeatherService.startUpdate(getActivity(), true);
+        JobUtil.startUpdate(getActivity());
     }
 }
