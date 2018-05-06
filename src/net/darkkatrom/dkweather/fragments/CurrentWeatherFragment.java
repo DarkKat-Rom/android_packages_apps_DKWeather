@@ -193,8 +193,7 @@ public class CurrentWeatherFragment extends WeatherFragment {
         int conditionIconType = Config.getConditionIconType(getActivity());
         int conditionIconColor = ThemeUtil.getConditionIconColor(getActivity(), conditionIconType);
         Drawable icon = mWeatherInfo.getConditionIcon(
-                conditionIconType,
-                mWeatherInfo.getConditionCode());
+                conditionIconType, mWeatherInfo.getConditionCode());
         final String[] tempValues = {
             mWeatherInfo.getForecasts().get(0).getFormattedMorning(),
             mWeatherInfo.getForecasts().get(0).getFormattedDay(),
