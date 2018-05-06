@@ -36,8 +36,8 @@ public class WeatherInfo {
     private static final DecimalFormat ONE_DIGITS_FORMAT = new DecimalFormat("##0.#");
     private static final DecimalFormat TWO_DIGITS_FORMAT = new DecimalFormat("##0.##");
 
-    private static final int ICON_MONOCHROME = 0;
-    private static final int ICON_COLORED    = 1;
+    public static final int ICON_MONOCHROME = 0;
+    public static final int ICON_COLORED    = 1;
 
     private static final float PRECIPITATION_ITEM_THRESHOLD = 0.005f;
 

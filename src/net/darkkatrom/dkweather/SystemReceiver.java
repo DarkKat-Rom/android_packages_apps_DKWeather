@@ -33,9 +33,8 @@ public class SystemReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         final String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            if (Config.isEnabled(context) && Config.isAutoUpdate(context)) {
+            if (Config.isEnabled(context)) {
                 if (DEBUG) Log.d(TAG, "boot completed");
-                Config.clearLastUpdateTime(context);
                 // kick updates
                 JobUtil.startUpdate(context);
                 JobUtil.scheduleUpdate(context);

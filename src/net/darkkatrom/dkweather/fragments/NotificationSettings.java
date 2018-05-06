@@ -50,6 +50,10 @@ public class NotificationSettings extends PreferenceFragment implements
 
         mShowDKIcon =
                 (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_DK_ICON);
+
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setSubtitle(R.string.action_bar_subtitle_settings_notification);
+        }
     }
 
     @Override

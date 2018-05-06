@@ -54,7 +54,7 @@ public class WeatherLocationTask extends AsyncTask<Void, Void, List<WeatherInfo.
 
         mProgressDialog = new ProgressDialog(mContext);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setMessage(mContext.getString(R.string.weather_progress_title));
+        mProgressDialog.setMessage(mContext.getString(R.string.dialog_location_progress_title));
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -75,7 +75,7 @@ public class WeatherLocationTask extends AsyncTask<Void, Void, List<WeatherInfo.
 
         if (results == null || results.isEmpty()) {
             Toast.makeText(mContext,
-                    mContext.getString(R.string.weather_retrieve_location_dialog_title),
+                    mContext.getString(R.string.dialog_retrieve_location_title),
                     Toast.LENGTH_SHORT)
                     .show();
         } else if (results.size() > 1) {
@@ -97,7 +97,7 @@ public class WeatherLocationTask extends AsyncTask<Void, Void, List<WeatherInfo.
             }
         })
         .setNegativeButton(android.R.string.cancel, null)
-        .setTitle(R.string.weather_select_location)
+        .setTitle(R.string.dialog_select_location_title)
         .show();
     }
 

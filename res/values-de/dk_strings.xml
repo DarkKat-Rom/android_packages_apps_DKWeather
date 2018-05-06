@@ -16,9 +16,10 @@
 <resources>
 
     <!-- General -->
-	<string name="app_name">DarkKat Wetter</string>
+    <string name="app_name">DarkKat Wetter</string>
     <string name="weather_title">Wetter</string>
     <string name="weather_not_available_title">Wetter Daten nicht verfügbar</string>
+    <string name="list_preference_default_summary">%s</string>
 
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Deaktiviert</string>
@@ -29,29 +30,32 @@
 
     <!-- Actionbar -->
     <string name="today_title">Heute</string>
-    <string name="update_weather">Wetter aktuallisieren</string>
+    <string name="menu_item_update_weather_title">Wetter aktuallisieren</string>
     <string name="weather_updated">Wetterdaten wurden aktuallisiert</string>
     <string name="action_bar_no_weather_data_part">, (keine Wetterdaten)</string>
+    <string name="action_bar_subtitle_settings">@string/settings_title</string>
+    <string name="action_bar_subtitle_settings_weather">Einstellungen -> \'Wetter konfigurieren\'</string>
+    <string name="action_bar_subtitle_settings_notification">Einstellungen -> \"Laufende Benachrichtigung\"</string>
 
     <!-- Weather fragments -->
-	<string name="current_title">Aktuell</string>
-	<string name="forecast_title">Vorhersage</string>
-	<string name="daytemps_title">Tagestemperaturen</string>
-	<string name="morning_title">Morgens:</string>
-	<string name="day_title">Tagsüber:</string>
-	<string name="evening_title">Abends:</string>
-	<string name="night_title">Nachts:</string>
-	<string name="min_title">Min. :</string>
-	<string name="max_title">Max. :</string>
-	<string name="precipitation_title">Niederschlag:</string>
-	<string name="no_precipitation_value">Keiner</string>
-	<string name="wind_title">Wind:</string>
-	<string name="sunrise_title">Sonnenaufgang:</string>
-	<string name="humidity_title">Luftfeuchtigkeit:</string>
-	<string name="pressure_title">Luftdruck:</string>
-	<string name="sunset_title">Sonnenuntergang:</string>
-	<string name="expand_card">Mehr anzeigen</string>
-	<string name="collapse_card">Weniger anzeigen</string>
+    <string name="current_title">Aktuell</string>
+    <string name="forecast_title">Vorhersage</string>
+    <string name="daytemps_title">Tagestemperaturen</string>
+    <string name="morning_title">Morgens:</string>
+    <string name="day_title">Tagsüber:</string>
+    <string name="evening_title">Abends:</string>
+    <string name="night_title">Nachts:</string>
+    <string name="min_title">Min. :</string>
+    <string name="max_title">Max. :</string>
+    <string name="precipitation_title">Niederschlag:</string>
+    <string name="no_precipitation_value">Keiner</string>
+    <string name="wind_title">Wind:</string>
+    <string name="sunrise_title">Sonnenaufgang:</string>
+    <string name="humidity_title">Luftfeuchtigkeit:</string>
+    <string name="pressure_title">Luftdruck:</string>
+    <string name="sunset_title">Sonnenuntergang:</string>
+    <string name="expand_card">Mehr anzeigen</string>
+    <string name="collapse_card">Weniger anzeigen</string>
 
     <!-- No weather data fragment -->
     <string name="no_weather_data_header">Wetterdaten sind nicht verfügbar!</string>
@@ -70,22 +74,41 @@
     <string name="speed_kph_unit_title">&#160;km/h</string>
     <string name="speed_mph_unit_title">&#160;mi/h</string>
     <string name="pressure_unit_title">&#160;hPa</string>
-	<string name="precipitation_unit_1h_title">&#160;mm/h</string>
-	<string name="precipitation_unit_3h_title">&#160;mm/3h</string>
+    <string name="precipitation_unit_1h_title">&#160;mm/h</string>
+    <string name="precipitation_unit_3h_title">&#160;mm/3h</string>
 
     <!-- Settings -->
-	<string name="settings_cat_app_drawer_title">App-Übersicht</string>
-	<string name="weather_settings_title">Wetter Einstellungen</string>
-	<string name="notification_title">Laufende Benachrichtigung</string>
-	<string name="owm_api_key_title">Open Weather Map API Key</string>
-	<string name="default_api_key_title">Standard Darkkat API Key</string>
-	<string name="custom_api_key_summary">Eigener API key</string>
-	<string name="owm_api_key_dlg_message">Gebe hier den API Key ein, oder lösche den API Key, um den Standard Darkkat API Key zu benutzen.</string>
-	<string name="show_settings_shortcut">Einstellungen-Verknüpfung anzeigen</string>
 
-	<string name="show_notification_title">Benachrichtigung anzeigen</string>
-	<string name="notification_show_location_title">Standort anzeigen</string>
-	<string name="notification_show_dk_icon_title">DarkKat Icon anzeigen</string>
+    <!-- Main -->
+    <string name="settings_weather_title">Wetter</string>
+    <string name="settings_weather_summary">Wetter konfigurieren</string>
+    <string name="settings_notification_title">Laufende Benachrichtigung</string>
+    <string name="settings_notification_summary">Wähle wie die Laufende Benachrichtigung dargestellt werden soll</string>
+
+    <!-- Weather setup -->
+    <string name="enable_summary">Wetter aktivieren</string>
+    <string name="owm_api_key_title">Open Weather Map API Key</string>
+    <string name="default_api_key_title">Standard Darkkat API Key</string>
+    <string name="custom_api_key_summary">Eigener API key</string>
+    <string name="custom_location_summary">Aktivieren um einen Benutzerdefinierten Standort zu nutzen, deaktivieren um den Android Standort Service zu nutzen,\n(\"Standort\" muß in den Systemeinstellungen aktiviert werden, und die Standortberechtigung muß gewärt werden).</string>
+    <string name="custom_location_city_missing_summary">Kein Standort,\nklicken um einen Standort einzugeben</string>
+    <string name="condition_icon_title">Wetterlage Symbol</string>
+    <string name="condition_icon_monochrome">Einfarbig</string>
+    <string name="condition_icon_colored">Farbig</string>
+    <string name="condition_icon_vclouds">VClouds</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_owm_api_key_message">Gebe hier den API Key ein, oder lösche den API Key, um den Standard Darkkat API Key zu benutzen.</string>
+    <!-- Weather setup end -->
+
+    <!-- Notification -->
+    <string name="show_notification_title">Benachrichtigung anzeigen</string>
+    <string name="show_notification_summary">Aktivieren um eine Laufende Wetter Benachrichtigung hinzuzufügen, deaktivieren um die Laufende Wetter Benachrichtigung zu entferenen</string>
+    <string name="notification_show_location_title">Standort anzeigen</string>
+    <string name="notification_show_location_summary">Aktivieren um den Wetter Standort anzuzeigen</string>
+    <string name="notification_show_dk_icon_title">DarkKat Icon anzeigen</string>
+    <string name="notification_show_dk_icon_summary">Aktivieren um das DarkKat Icon als Benachrichtigungs-Icon anzuzeigen, deaktivieren um die aktuelle Temperatur als Benachrichtigungs-Icon anzuzeigen</string>
+    <!-- Settings end -->
 
     <!-- CyanogenMod additions -->
 

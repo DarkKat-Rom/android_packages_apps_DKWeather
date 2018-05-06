@@ -123,7 +123,9 @@ public class MainActivity extends BaseActivity implements
                     mUpdateRequested = false;
                 }
             }
-            updateContent();
+            if (mVisibleScreen != SETTINGS) {
+                updateContent();
+            }
         }
     }
 
@@ -406,7 +408,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onLongClick(View v) {
         if (v.getId() == R.id.update_button_layout) {
-            showToast(R.string.update_weather);
+            showToast(R.string.menu_item_update_weather_title);
             return true;
         }
         return false;

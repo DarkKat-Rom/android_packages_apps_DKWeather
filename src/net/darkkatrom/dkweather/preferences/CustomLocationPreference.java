@@ -52,7 +52,7 @@ public class CustomLocationPreference extends EditTextPreference implements Weat
         if (location != null) {
             setSummary(location);
         } else {
-            setSummary(R.string.weather_custom_location_missing);
+            setSummary(R.string.custom_location_city_missing_summary);
         }
     }
     @Override
