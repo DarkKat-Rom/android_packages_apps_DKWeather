@@ -17,7 +17,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_update"
-        android:title="@string/update_weather"
+        android:title="@string/menu_item_update_weather_title"
         android:actionLayout="@layout/actionbar_update_button"
         android:showAsAction="always">
     </item>

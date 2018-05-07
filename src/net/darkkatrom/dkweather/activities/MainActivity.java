@@ -42,13 +42,14 @@ import com.android.internal.util.darkkat.ThemeHelper;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
-import net.darkkatrom.dkweather.WeatherService;
 import net.darkkatrom.dkweather.fragments.WeatherFragment;
 import net.darkkatrom.dkweather.fragments.CurrentWeatherFragment;
 import net.darkkatrom.dkweather.fragments.ForecastWeatherFragment;
 import net.darkkatrom.dkweather.fragments.NoWeatherDataFragment;
 import net.darkkatrom.dkweather.fragments.SettingsFragment;
 import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.JobUtil;
+import net.darkkatrom.dkweather.utils.NotificationUtil;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -122,7 +123,9 @@ public class MainActivity extends BaseActivity implements
                     mUpdateRequested = false;
                 }
             }
-            updateContent();
+            if (mVisibleScreen != SETTINGS) {
+                updateContent();
+            }
         }
     }
 
@@ -137,6 +140,9 @@ public class MainActivity extends BaseActivity implements
         mResolver = getContentResolver();
         mWeatherObserver = new WeatherObserver(mHandler);
         mWeatherInfo = getWeather();
+
+        NotificationUtil notificationUtil = new NotificationUtil(this);
+        notificationUtil.setNotificationChannels();
 
         createOrRestoreState(savedInstanceState == null ? getIntent().getExtras() : savedInstanceState);
         updateActionBar();
@@ -336,6 +342,7 @@ public class MainActivity extends BaseActivity implements
         updateActionBar();
         replaceFragment();
         updateBottomNavigationItemState();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -348,6 +355,12 @@ public class MainActivity extends BaseActivity implements
         updateButtonLayout.setOnClickListener(this);
         updateButtonLayout.setOnLongClickListener(this);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.item_update).setVisible(mVisibleScreen != SETTINGS);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public void onBottomNavigationItemClick(View v) {
@@ -388,14 +401,14 @@ public class MainActivity extends BaseActivity implements
             });
             mUpdateButton.startAnimation(anim);
             mUpdateRequested = true;
-            WeatherService.startUpdate(this, true);
+            JobUtil.startUpdate(this);
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
         if (v.getId() == R.id.update_button_layout) {
-            showToast(R.string.update_weather);
+            showToast(R.string.menu_item_update_weather_title);
             return true;
         }
         return false;

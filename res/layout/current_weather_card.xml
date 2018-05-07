@@ -67,7 +67,6 @@
                 android:layout_width="@dimen/current_card_condition_image_size"
                 android:layout_height="@dimen/current_card_condition_image_size"
                 android:src="@android:drawable/ic_dialog_alert"
-                android:tint="?android:attr/colorControlNormal"
                 android:tintMode="multiply"
                 android:scaleType="fitCenter" />
 

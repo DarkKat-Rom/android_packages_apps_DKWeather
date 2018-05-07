@@ -19,25 +19,23 @@
     <string name="app_name">DarkKat Weather</string>
     <string name="weather_title">Weather</string>
     <string name="weather_not_available_title">Weather data not available</string>
+    <string name="list_preference_default_summary">%s</string>
 
     <!-- App shortcuts -->
     <string name="shortcut_disabled_message">Disabled</string>
 
-    <!-- Notifications -->
-    <string name="foreground_service_notification_content_title">WeatherService</string>
-    <string name="foreground_service_notification_content_text">WeatherService is running in the foreground</string>
-
     <!-- Notification channels -->
     <string name="weather_notification_chanel_title">Weather</string>
     <string name="weather_notification_chanel_description">Category used for the ongoing weather notification</string>
-    <string name="foreground_service_notification_chanel_title">WeatherService</string>
-    <string name="foreground_service_notification_chanel_description">Category used for WeatherService notifications</string>
 
     <!-- Actionbar -->
     <string name="today_title">Today</string>
-    <string name="update_weather">Update Weather</string>
+    <string name="menu_item_update_weather_title">Update Weather</string>
     <string name="weather_updated">Weather data has been updated</string>
     <string name="action_bar_no_weather_data_part">, (no weather data)</string>
+    <string name="action_bar_subtitle_settings">@string/settings_title</string>
+    <string name="action_bar_subtitle_settings_weather">Settings -> \'Setup the weather\'</string>
+    <string name="action_bar_subtitle_settings_notification">Settings -> \'Ongoing notification\'</string>
 
     <!-- Weather fragments -->
     <string name="current_title">Current</string>
@@ -80,18 +78,37 @@
     <string name="precipitation_unit_3h_title">&#160;mm/3h</string>
 
     <!-- Settings -->
-    <string name="settings_cat_app_drawer_title">App drawer</string>
-    <string name="weather_settings_title">Weather settings</string>
-    <string name="notification_title">Ongoing notification</string>
+
+    <!-- Main -->
+    <string name="settings_weather_title">Weather</string>
+    <string name="settings_weather_summary">Setup the weather</string>
+    <string name="settings_notification_title">Ongoing notification</string>
+    <string name="settings_notification_summary">Choose how to display the ongoing notification</string>
+
+    <!-- Weather setup -->
+    <string name="enable_summary">Enable the weather</string>
     <string name="owm_api_key_title">Open Weather Map API key</string>
     <string name="default_api_key_title">Default Darkkat API key</string>
     <string name="custom_api_key_summary">Own API key</string>
-    <string name="owm_api_key_dlg_message">Enter the API key here, or delete API key, to use the default DarkKat API key</string>
-    <string name="show_settings_shortcut">Show settings shortcut</string>
+    <string name="custom_location_summary">Enable to use a custom location, disable to use the Android location service,\n(\'Location\' has to be enabled via system settings, and location permission has to be granted).</string>
+    <string name="custom_location_city_missing_summary">No location,\nclick to enter location</string>
+    <string name="condition_icon_title">Condition icon</string>
+    <string name="condition_icon_monochrome">Monochrome</string>
+    <string name="condition_icon_colored">Colored</string>
+    <string name="condition_icon_vclouds">VClouds</string>
 
+    <!-- Dialogs -->
+    <string name="dialog_owm_api_key_message">Enter the API key here, or delete API key, to use the default DarkKat API key</string>
+    <!-- Weather setup end -->
+
+    <!-- Notification -->
     <string name="show_notification_title">Show ongoing notification</string>
+    <string name="show_notification_summary">Enable to add an ongoing weather notification, disable to remove the ongoing weather notification</string>
     <string name="notification_show_location_title">Show location</string>
+    <string name="notification_show_location_summary">Enable to show the weather location</string>
     <string name="notification_show_dk_icon_title">Show DarkKat icon</string>
+    <string name="notification_show_dk_icon_summary">Enable to show the DarkKat icon as notification icon, disable to show the current temperature as notification icon</string>
+    <!-- Settings end -->
 
     <!-- CyanogenMod additions -->
 

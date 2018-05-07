@@ -47,4 +47,14 @@
         <item>6</item>
         <item>12</item>
     </string-array>
+    <string-array name="condition_icon_entries" translatable="false">
+        <item>@string/condition_icon_monochrome</item>
+        <item>@string/condition_icon_colored</item>
+        <item>@string/condition_icon_vclouds</item>
+        </string-array>
+    <string-array name="condition_icon_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

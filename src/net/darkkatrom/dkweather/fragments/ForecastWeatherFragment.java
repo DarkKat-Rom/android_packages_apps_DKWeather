@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,12 +33,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.internal.util.darkkat.WeatherHelper;
-
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.WeatherInfo;
 import net.darkkatrom.dkweather.WeatherInfo.HourForecast;
 import net.darkkatrom.dkweather.activities.MainActivity;
+import net.darkkatrom.dkweather.utils.Config;
+import net.darkkatrom.dkweather.utils.ThemeUtil;
 
 import java.util.ArrayList;
 
@@ -302,15 +303,21 @@ public class ForecastWeatherFragment extends WeatherFragment {
             if (getActivity() == null || mWeatherInfo == null) {
                 return;
             }
+            int conditionIconType = Config.getConditionIconType(getActivity());
+            int conditionIconColor = ThemeUtil.getConditionIconColor(getActivity(), conditionIconType);
             final Drawable icon = mWeatherInfo.getConditionIcon(
-                    WeatherHelper.getDetailedWeatherConditionIconType(getActivity()),
-                    h.getConditionCode());
+                    conditionIconType, h.getConditionCode());
             final String rain = h.getFormattedRain();
             final String snow = h.getFormattedSnow();
             final String noPrecipitationValue = getActivity().getResources().getString(
                     R.string.no_precipitation_value);
 
             timeValue.setText(h.getTime());
+            if (conditionIconColor != 0) {
+                image.setImageTintList(ColorStateList.valueOf(conditionIconColor));
+            } else {
+                image.setImageTintList(null);
+            }
             image.setImageDrawable(icon);
             tempValue.setText(h.getFormattedTemperature());
             conditionValue.setText(h.getCondition());

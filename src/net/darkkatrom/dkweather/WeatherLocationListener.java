@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 
+import net.darkkatrom.dkweather.utils.JobUtil;
+
 class WeatherLocationListener implements LocationListener {
     private static final String TAG = "DKWeather:WeatherLocationListener";
     private static final boolean DEBUG = false;
@@ -82,20 +84,20 @@ class WeatherLocationListener implements LocationListener {
     }
 
     private void setTimeoutAlarm() {
-        Intent intent = new Intent(mContext, WeatherService.class);
-        intent.setAction(WeatherService.ACTION_CANCEL_LOCATION_UPDATE);
+        Intent intent = new Intent(mContext, WeatherJobService.class);
+        intent.setAction(WeatherJobService.ACTION_CANCEL_LOCATION_UPDATE);
 
         mTimeoutIntent = PendingIntent.getService(mContext, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT);
 
-        AlarmManager am = (AlarmManager) mContext.getSystemService(WeatherService.ALARM_SERVICE);
-        long elapseTime = SystemClock.elapsedRealtime() + WeatherService.LOCATION_REQUEST_TIMEOUT;
+        AlarmManager am = (AlarmManager) mContext.getSystemService(WeatherJobService.ALARM_SERVICE);
+        long elapseTime = SystemClock.elapsedRealtime() + WeatherJobService.LOCATION_REQUEST_TIMEOUT;
         am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, elapseTime, mTimeoutIntent);
     }
 
     private void cancelTimeoutAlarm() {
         if (mTimeoutIntent != null) {
-            AlarmManager am = (AlarmManager) mContext.getSystemService(WeatherService.ALARM_SERVICE);
+            AlarmManager am = (AlarmManager) mContext.getSystemService(WeatherJobService.ALARM_SERVICE);
             am.cancel(mTimeoutIntent);
             mTimeoutIntent = null;
         }
@@ -106,7 +108,7 @@ class WeatherLocationListener implements LocationListener {
         // Now, we have a location to use. Schedule a weather update right now.
         if (DEBUG) Log.d(TAG, "The location has changed, schedule an update ");
         synchronized (WeatherLocationListener.class) {
-            WeatherService.startUpdate(mContext, true);
+            JobUtil.startUpdate(mContext);
             cancelTimeoutAlarm();
             sInstance = null;
         }
@@ -118,7 +120,7 @@ class WeatherLocationListener implements LocationListener {
         if (DEBUG) Log.d(TAG, "The location service has become available, schedule an update ");
         if (status == LocationProvider.AVAILABLE) {
             synchronized (WeatherLocationListener.class) {
-                WeatherService.startUpdate(mContext, true);
+                JobUtil.startUpdate(mContext);
                 cancelTimeoutAlarm();
                 sInstance = null;
             }
