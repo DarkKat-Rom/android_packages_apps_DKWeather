@@ -35,7 +35,7 @@
     <string name="action_bar_no_weather_data_part">, (no weather data)</string>
     <string name="action_bar_subtitle_settings">@string/settings_title</string>
     <string name="action_bar_subtitle_settings_weather">Settings -> \'Setup the weather\'</string>
-    <string name="action_bar_subtitle_settings_notification">Settings -> \'Ongoing notification\'</string>
+    <string name="action_bar_subtitle_settings_notification">Settings -> \'notification\'</string>
 
     <!-- Weather fragments -->
     <string name="current_title">Current</string>
@@ -82,8 +82,8 @@
     <!-- Main -->
     <string name="settings_weather_title">Weather</string>
     <string name="settings_weather_summary">Setup the weather</string>
-    <string name="settings_notification_title">Ongoing notification</string>
-    <string name="settings_notification_summary">Choose how to display the ongoing notification</string>
+    <string name="settings_notification_title">Notification</string>
+    <string name="settings_notification_summary">Choose how to display the notification</string>
 
     <!-- Weather setup -->
     <string name="enable_summary">Enable the weather</string>
@@ -102,8 +102,10 @@
     <!-- Weather setup end -->
 
     <!-- Notification -->
-    <string name="show_notification_title">Show ongoing notification</string>
-    <string name="show_notification_summary">Enable to add an ongoing weather notification, disable to remove the ongoing weather notification</string>
+    <string name="show_notification_title">Show notification</string>
+    <string name="show_notification_summary">Enable to show a weather notification, disabling will also remove the (ongoing) weather notification</string>
+    <string name="show_notification_ongoing_title">Show notification ongoing</string>
+    <string name="show_notification_ongoing_summary">Enable to show the weather notification ongoing.\nNOTE: Ongoing notifications will possibly not showing on wearable devices!</string>
     <string name="notification_show_location_title">Show location</string>
     <string name="notification_show_location_summary">Enable to show the weather location</string>
     <string name="notification_show_dk_icon_title">Show DarkKat icon</string>

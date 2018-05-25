@@ -22,6 +22,13 @@ limitations under the License.
         android:defaultValue="false" />
 
     <SwitchPreference
+        android:key="show_notification_ongoing"
+        android:title="@string/show_notification_ongoing_title"
+        android:summary="@string/show_notification_ongoing_summary"
+        android:defaultValue="false"
+        android:dependency="show_notification" />
+
+    <SwitchPreference
         android:key="notification_show_location"
         android:title="@string/notification_show_location_title"
         android:summary="@string/notification_show_location_summary"

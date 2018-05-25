@@ -69,17 +69,23 @@ public class NotificationUtil {
         WeatherInfo info =  Config.getWeatherData(mContext);
         boolean showDKIcon =  Config.getNotificationShowDKIcon(mContext);
         int notificationColor = mContext.getColor(R.color.accent_darkkat);
+        boolean ongoing =  Config.getShowNotificationOngoing(mContext);
+        boolean showLocation =  Config.getNotificationShowLocation(mContext);
 
         Notification.Builder builder = new Notification.Builder(mContext, WEATHER_NOTIFICATION_CHANNEL_ID)
             .setShowWhen(true)
             .setWhen(System.currentTimeMillis())
-            .setOngoing(true)
+            .setContentTitle(info.getFormattedTemperature() + " - " + info.getCondition())
+            .setContentText(showLocation ? info.getCity() : "")
             .setStyle(new Notification.DecoratedCustomViewStyle())
             .setCustomContentView(getCollapsedContent(info, notificationColor))
             .setCustomBigContentView(getExpandedContent(info, notificationColor))
             .setColor(notificationColor)
             .addAction(getSettingsAction());
 
+        if (ongoing) {
+            builder.setOngoing(true);
+        }
         if (showDKIcon) {
             builder.setSmallIcon(R.drawable.ic_dk);
         } else {
