@@ -26,7 +26,7 @@
 
     <!-- Notification channels -->
     <string name="weather_notification_chanel_title">Wetter</string>
-    <string name="weather_notification_chanel_description">Kategorie für die laufende Wetter Benachrichtigung</string>
+    <string name="weather_notification_chanel_description">Kategorie für die Wetter Benachrichtigung</string>
 
     <!-- Actionbar -->
     <string name="today_title">Heute</string>
@@ -35,7 +35,7 @@
     <string name="action_bar_no_weather_data_part">, (keine Wetterdaten)</string>
     <string name="action_bar_subtitle_settings">@string/settings_title</string>
     <string name="action_bar_subtitle_settings_weather">Einstellungen -> \'Wetter konfigurieren\'</string>
-    <string name="action_bar_subtitle_settings_notification">Einstellungen -> \"Laufende Benachrichtigung\"</string>
+    <string name="action_bar_subtitle_settings_notification">Einstellungen -> \"Benachrichtigung\"</string>
 
     <!-- Weather fragments -->
     <string name="current_title">Aktuell</string>
@@ -82,8 +82,8 @@
     <!-- Main -->
     <string name="settings_weather_title">Wetter</string>
     <string name="settings_weather_summary">Wetter konfigurieren</string>
-    <string name="settings_notification_title">Laufende Benachrichtigung</string>
-    <string name="settings_notification_summary">Wähle wie die Laufende Benachrichtigung dargestellt werden soll</string>
+    <string name="settings_notification_title">Benachrichtigung</string>
+    <string name="settings_notification_summary">Wähle wie die Benachrichtigung dargestellt werden soll</string>
 
     <!-- Weather setup -->
     <string name="enable_summary">Wetter aktivieren</string>
@@ -103,7 +103,9 @@
 
     <!-- Notification -->
     <string name="show_notification_title">Benachrichtigung anzeigen</string>
-    <string name="show_notification_summary">Aktivieren um eine Laufende Wetter Benachrichtigung hinzuzufügen, deaktivieren um die Laufende Wetter Benachrichtigung zu entferenen</string>
+    <string name="show_notification_summary">Aktivieren um eine Wetter Benachrichtigung anzuzeigen, das Deaktivieren entfernt ebenfalls (laufende) die Wetter Benachrichtigung</string>
+    <string name="show_notification_ongoing_title">Als laufende Benachrichtigung anzeigen</string>
+    <string name="show_notification_ongoing_summary">Aktivieren um die Wetter Benachrichtigung als laufende Benachrichtigung anzeigen.\nHINWEIS: Laufende Benachrichtigungen werden evtl. nicht auf \"Wearables\" wie Uhren, Armbändern, ... angezeigt.</string>
     <string name="notification_show_location_title">Standort anzeigen</string>
     <string name="notification_show_location_summary">Aktivieren um den Wetter Standort anzuzeigen</string>
     <string name="notification_show_dk_icon_title">DarkKat Icon anzeigen</string>

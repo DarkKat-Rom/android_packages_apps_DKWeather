@@ -32,6 +32,7 @@ public class NotificationSettings extends PreferenceFragment implements
         OnSharedPreferenceChangeListener {
 
     private SwitchPreference mShow;
+    private SwitchPreference mShowOngoing;
     private SwitchPreference mShowLocation;
     private SwitchPreference mShowDKIcon;
 
@@ -44,6 +45,8 @@ public class NotificationSettings extends PreferenceFragment implements
                 .registerOnSharedPreferenceChangeListener(this);
 
         mShow = (SwitchPreference) findPreference(Config.PREF_KEY_SHOW_NOTIF);
+
+        mShowOngoing = (SwitchPreference) findPreference(Config.PREF_KEY_SHOW_NOTIF_ONGOING);
 
         mShowLocation =
                 (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_LOCATION);
@@ -64,7 +67,8 @@ public class NotificationSettings extends PreferenceFragment implements
             } else {
                 NotificationUtil.removeNotification(getActivity());
             }
-        } else if (key == mShowLocation.getKey()
+        } else if (key == mShowOngoing.getKey()
+                    || key == mShowLocation.getKey()
                     || key == mShowDKIcon.getKey()) {
             sendNotification();
         }

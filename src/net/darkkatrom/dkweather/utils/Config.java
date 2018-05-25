@@ -37,6 +37,7 @@ public class Config {
     public static final String PREF_KEY_CONDITION_ICON       = "condition_icon";
 
     public static final String PREF_KEY_SHOW_NOTIF          = "show_notification";
+    public static final String PREF_KEY_SHOW_NOTIF_ONGOING  = "show_notification_ongoing";
     public static final String PREF_KEY_NOTIF_SHOW_LOCATION = "notification_show_location";
     public static final String PREF_KEY_NOTIF_SHOW_DK_ICON  = "notification_show_dk_icon";
 
@@ -157,6 +158,13 @@ public class Config {
                 .getDefaultSharedPreferences(context);
 
         return prefs.getBoolean(PREF_KEY_SHOW_NOTIF, false);
+    }
+
+    public static boolean getShowNotificationOngoing(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        return prefs.getBoolean(PREF_KEY_SHOW_NOTIF_ONGOING, false);
     }
 
     public static boolean getNotificationShowLocation(Context context) {
