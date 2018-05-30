@@ -21,8 +21,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
+import android.preference.PreferenceScreen;
 
 import net.darkkatrom.dkweather.R;
 import net.darkkatrom.dkweather.utils.Config;
@@ -31,28 +30,24 @@ import net.darkkatrom.dkweather.utils.NotificationUtil;
 public class NotificationSettings extends PreferenceFragment implements
         OnSharedPreferenceChangeListener {
 
-    private SwitchPreference mShow;
-    private SwitchPreference mShowOngoing;
-    private SwitchPreference mShowLocation;
-    private SwitchPreference mShowDKIcon;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updatePreferenceScreen();
+    }
 
+    public void updatePreferenceScreen() {
+        PreferenceScreen prefs = getPreferenceScreen();
+        if (prefs != null) {
+            prefs.removeAll();
+        }
         addPreferencesFromResource(R.xml.notification_settings);
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .registerOnSharedPreferenceChangeListener(this);
 
-        mShow = (SwitchPreference) findPreference(Config.PREF_KEY_SHOW_NOTIF);
-
-        mShowOngoing = (SwitchPreference) findPreference(Config.PREF_KEY_SHOW_NOTIF_ONGOING);
-
-        mShowLocation =
-                (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_LOCATION);
-
-        mShowDKIcon =
-                (SwitchPreference) findPreference(Config.PREF_KEY_NOTIF_SHOW_DK_ICON);
+        if (!Config.getShowNotification(getActivity())) {
+            removePreference(Config.PREF_KEY_SHOW_NOTIF_ONGOING);
+            removePreference(Config.PREF_KEY_NOTIF_SHOW_LOCATION);
+            removePreference(Config.PREF_KEY_NOTIF_SHOW_DK_ICON);
+        }
 
         if (getActivity().getActionBar() != null) {
             getActivity().getActionBar().setSubtitle(R.string.action_bar_subtitle_settings_notification);
@@ -61,21 +56,43 @@ public class NotificationSettings extends PreferenceFragment implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key == mShow.getKey()) {
-            if (mShow.isChecked()) {
+        if (key.equals(Config.PREF_KEY_SHOW_NOTIF)) {
+            if (Config.getShowNotification(getActivity())) {
                 sendNotification();
             } else {
                 NotificationUtil.removeNotification(getActivity());
             }
-        } else if (key == mShowOngoing.getKey()
-                    || key == mShowLocation.getKey()
-                    || key == mShowDKIcon.getKey()) {
+            updatePreferenceScreen();
+        } else if (key.equals(Config.PREF_KEY_SHOW_NOTIF_ONGOING)
+                    || key.equals(Config.PREF_KEY_NOTIF_SHOW_LOCATION)
+                    || key.equals(Config.PREF_KEY_NOTIF_SHOW_DK_ICON)) {
             sendNotification();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private void sendNotification() {
         NotificationUtil notificationUtil = new NotificationUtil(getActivity());
         notificationUtil.sendNotification();
+    }
+
+    protected void removePreference(String key) {
+        Preference pref = findPreference(key);
+        if (pref != null) {
+            getPreferenceScreen().removePreference(pref);
+        }
     }
 }
