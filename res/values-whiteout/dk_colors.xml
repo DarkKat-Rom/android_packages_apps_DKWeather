@@ -16,13 +16,5 @@
 <resources>
 
     <!-- Theme.Material.Light (Whiteout version) -->
-
-    <!-- Overlay for theme default action- and status bar colors -->
-    <color name="theme_primary">@color/primary_whiteout</color>
-    <color name="theme_primary_dark">@color/primary_dark_whiteout</color>
-
-    <!-- Overlay for theme default accent color -->
-    <color name="theme_accent">@color/accent_whiteout</color>
-
-    <color name="bottom_navigation_selected_item_text_icon_color">@color/accent_whiteout</color>
+    <color name="bottom_navigation_selected_item_text_icon_color">@color/black</color>
 </resources>

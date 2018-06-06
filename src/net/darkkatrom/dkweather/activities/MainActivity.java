@@ -19,6 +19,7 @@ import android.app.Fragment;
 import android.app.UiModeManager;
 import android.content.ContentResolver;
 import android.database.ContentObserver;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import com.android.internal.util.darkkat.ThemeColorHelper;
 import com.android.internal.util.darkkat.ThemeHelper;
 
 import net.darkkatrom.dkweather.R;
@@ -93,8 +95,13 @@ public class MainActivity extends BaseActivity implements
 
     private boolean mUpdateRequested = false;
 
-    private boolean mUseOptionalLightStatusBar;
-    private boolean mUseOptionalLightNavigationBar;
+    private boolean mCustomizeColors = false;
+    private int mDefaultPrimaryColor = 0;
+    private int mPrimaryColor = 0;
+    private boolean mColorizeNavigationBar = false;
+    private boolean mLightStatusBar = false;
+    private boolean mLightActionBar = false;
+    private boolean mLightNavigationBar = false;
 
     class WeatherObserver extends ContentObserver {
         WeatherObserver(Handler handler) {
@@ -154,40 +161,47 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void updateTheme() {
-        mUseOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
         int themeResId = 0;
+        mCustomizeColors = ThemeColorHelper.customizeColors(this);
+        mDefaultPrimaryColor = getColor(R.color.theme_primary);
+        int statusBarColor = ThemeColorHelper.getStatusBarBackgroundColor(this, mDefaultPrimaryColor);
+        mPrimaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        int navigationColor = ThemeColorHelper.getNavigationBarBackgroundColor(this, mDefaultPrimaryColor);
+        mColorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
+        mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
+        mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
+        mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+        boolean isBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        boolean isWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
-        if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar_LightNavigationBar;
-        } else if (mUseOptionalLightStatusBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar;
-        } else if (mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightNavigationBar;
+        if (mLightActionBar && mLightNavigationBar) {
+            themeResId = mLightStatusBar
+                    ? R.style.AppTheme_LightStatusBar_LightNavigationBar
+                    : R.style.AppTheme_LightActionBar_LightNavigationBar;
+        } else if (mLightActionBar) {
+            themeResId = mLightStatusBar
+                    ? R.style.AppTheme_LightStatusBar
+                    : R.style.AppTheme_LightActionBar;
+        } else if (mLightNavigationBar) {
+            themeResId = R.style.AppTheme_LightNavigationBar;
         } else {
             themeResId = R.style.AppTheme;
         }
+
         setTheme(themeResId);
 
         int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
         int newFlags = oldFlags;
-        if (!mUseOptionalLightStatusBar) {
-            // Possibly we are using the Whiteout theme
-            boolean isWhiteoutTheme =
-                    ThemeHelper.getTheme(this) == UiModeManager.MODE_NIGHT_NO_WHITEOUT;
+        if (!mLightStatusBar) {
             boolean isLightStatusBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            // Check if light status bar flag was set,
-            // and we are not using the Whiteout theme,
-            // (Whiteout theme should always use a light status bar).
-            if (isLightStatusBar && !isWhiteoutTheme) {
+            // Check if light status bar flag was set.
+            if (isLightStatusBar) {
                 // Remove flag
                 newFlags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
         }
-        if (!mUseOptionalLightNavigationBar) {
+        if (!mLightNavigationBar) {
             // Check if light navigation bar flag was set
             boolean isLightNavigationBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -198,6 +212,14 @@ public class MainActivity extends BaseActivity implements
         }
         if (oldFlags != newFlags) {
             getWindow().getDecorView().setSystemUiVisibility(newFlags);
+        }
+
+        if (mCustomizeColors && !isBlackoutTheme && !isWhiteoutTheme) {
+            getWindow().setStatusBarColor(statusBarColor);
+            getActionBar().setBackgroundDrawable(new ColorDrawable(mPrimaryColor));
+        }
+        if (navigationColor != 0) {
+            getWindow().setNavigationBarColor(navigationColor);
         }
     }
 
@@ -270,12 +292,19 @@ public class MainActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
-        boolean useOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        boolean useOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
-        if (mUseOptionalLightStatusBar != useOptionalLightStatusBar
-                || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
+        boolean customizeColors = ThemeColorHelper.customizeColors(this);
+        int primaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        boolean colorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
+        boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
+        boolean lightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
+        boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+
+        if (mCustomizeColors != customizeColors
+                || mPrimaryColor != primaryColor
+                || mColorizeNavigationBar != colorizeNavigationBar
+                || mLightStatusBar != lightStatusBar
+                || mLightActionBar != lightActionBar
+                || mLightNavigationBar != lightNavigationBar) {
             recreate();
         } else {
             mWeatherObserver.observe();

@@ -18,20 +18,19 @@
 
     <!-- Theme.Material.Light (Whiteout version) -->
 
+    <!-- Always use light action bar and system bars -->
     <!-- App splash theme -->
     <style name="AppSplashTheme" parent="@android:style/Theme.Material.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_bg</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="android:colorPrimaryDark">@color/material_grey_300</item>
     </style>
 
-    <!-- App theme -->
-    <style name="AppTheme" parent="@android:style/Theme.Material.DayNight">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:colorPrimary">@color/theme_primary</item>
-        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
-        <item name="android:colorAccent">@color/theme_accent</item>
-    </style>
-
-    <style name="ThemeOverlay.LightStatusBar" parent="@style/AppTheme" />
+    <style name="AppTheme"
+            parent="@android:style/Theme.Material.DayNight.LightStatusBar.LightNavigationBar" />
+    <style name="AppTheme.LightActionBar" />
+    <style name="AppTheme.LightStatusBar" />
+    <style name="AppTheme.LightNavigationBar" />
+    <style name="AppTheme.LightActionBar.LightNavigationBar" />
+    <style name="AppTheme.LightStatusBar.LightNavigationBar" />
 </resources>
