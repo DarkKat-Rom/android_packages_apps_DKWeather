@@ -28,17 +28,30 @@
         <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 
-    <style name="ThemeOverlay.LightStatusBar" parent="@android:style/Theme.Material.Light.LightStatusBar">
+    <style name="AppTheme.LightActionBar" parent="@android:style/Theme.Material.DayNight.LightActionBar">
+        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 
-    <style name="ThemeOverlay.LightNavigationBar" parent="@style/AppTheme">
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">@color/background_light_system_bars</item>
+    <style name="AppTheme.LightStatusBar" parent="@android:style/Theme.Material.DayNight.LightStatusBar">
+        <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 
-    <style name="ThemeOverlay.LightStatusBar.LightNavigationBar">
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:navigationBarColor">@color/background_light_system_bars</item>
+    <style name="AppTheme.LightNavigationBar"
+            parent="@android:style/Theme.Material.DayNight.DarkActionBar.LightNavigationBar">
+        <item name="android:colorPrimary">@color/theme_primary</item>
+        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="android:colorAccent">@color/theme_accent</item>
+    </style>
+
+    <style name="AppTheme.LightActionBar.LightNavigationBar"
+            parent="@android:style/Theme.Material.DayNight.LightActionBar.LightNavigationBar">
+        <item name="android:colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="android:colorAccent">@color/theme_accent</item>
+    </style>
+
+    <style name="AppTheme.LightStatusBar.LightNavigationBar"
+            parent="@android:style/Theme.Material.DayNight.LightStatusBar.LightNavigationBar">
+        <item name="android:colorAccent">@color/theme_accent</item>
     </style>
 </resources>
