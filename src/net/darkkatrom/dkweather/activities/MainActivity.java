@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity implements
         mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
         mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
-        boolean isBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        boolean isBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
         boolean isWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
         if (mLightActionBar && mLightNavigationBar) {
