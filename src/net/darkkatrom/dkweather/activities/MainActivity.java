@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity implements
     private boolean mLightStatusBar = false;
     private boolean mLightActionBar = false;
     private boolean mLightNavigationBar = false;
+    private int mThemeOverlayAccentResId = 0;
 
     class WeatherObserver extends ContentObserver {
         WeatherObserver(Handler handler) {
@@ -171,7 +172,7 @@ public class MainActivity extends BaseActivity implements
         mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
         mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
-        boolean isBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        boolean isBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
         boolean isWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
         if (mLightActionBar && mLightNavigationBar) {
@@ -189,6 +190,11 @@ public class MainActivity extends BaseActivity implements
         }
 
         setTheme(themeResId);
+
+        mThemeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
+        if (mThemeOverlayAccentResId > 0) {
+            getTheme().applyStyle(mThemeOverlayAccentResId, true);
+        }
 
         int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
         int newFlags = oldFlags;
@@ -298,8 +304,10 @@ public class MainActivity extends BaseActivity implements
         boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
         boolean lightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+        int themeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
 
-        if (mCustomizeColors != customizeColors
+        if (mThemeOverlayAccentResId != themeOverlayAccentResId
+                || mCustomizeColors != customizeColors
                 || mPrimaryColor != primaryColor
                 || mColorizeNavigationBar != colorizeNavigationBar
                 || mLightStatusBar != lightStatusBar
