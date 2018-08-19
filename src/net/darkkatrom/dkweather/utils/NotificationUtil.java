@@ -68,7 +68,7 @@ public class NotificationUtil {
     private Notification createWeatherNotification() {
         WeatherInfo info =  Config.getWeatherData(mContext);
         boolean showDKIcon =  Config.getNotificationShowDKIcon(mContext);
-        int notificationColor = mContext.getColor(R.color.accent_darkkat);
+        int notificationColor = mContext.getColor(com.android.internal.R.color.accent_darkkat);
         boolean ongoing =  Config.getShowNotificationOngoing(mContext);
         boolean showLocation =  Config.getNotificationShowLocation(mContext);
 
