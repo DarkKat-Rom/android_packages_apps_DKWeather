@@ -15,18 +15,11 @@
 -->
 <resources>
 
-    <!-- RGB based colors -->
-    <color name="black">#ff000000</color>
-    <color name="white">#ffffffff</color>
-
     <!-- Material based colors -->
-    <color name="material_blue_500">#ff2196f3</color>
     <color name="material_grey_300">#ffe0e0e0</color>
-    <!-- DarkKat colors -->
-    <color name="accent_darkkat">#ff5a8596</color>  <!-- 12% holo blue light over material blue grey 500 -->
 
     <!-- Text and icon colors -->
-    <color name="text_primary_dark">@color/white</color>
+    <color name="text_primary_dark">@android:color/white</color>
     <color name="text_primary_light">#de000000</color>  <!-- 87% black -->
     <color name="text_secondary_light">#8a000000</color>  <!-- 54% black -->
 </resources>

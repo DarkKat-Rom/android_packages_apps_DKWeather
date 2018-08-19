@@ -95,14 +95,18 @@ public class MainActivity extends BaseActivity implements
 
     private boolean mUpdateRequested = false;
 
-    private boolean mCustomizeColors = false;
     private int mDefaultPrimaryColor = 0;
-    private int mPrimaryColor = 0;
-    private boolean mColorizeNavigationBar = false;
-    private boolean mLightStatusBar = false;
-    private boolean mLightActionBar = false;
-    private boolean mLightNavigationBar = false;
+    private int mThemeResId = 0;
     private int mThemeOverlayAccentResId = 0;
+    private boolean mLightStatusBar = false;
+    private boolean mLightNavigationBar = false;
+    private int mStatusBarColor = 0;
+    private int mPrimaryColor = 0;
+    private boolean mCustomizeColors = false;
+    private boolean mIsBlackoutTheme = false;
+    private boolean mIsWhiteoutTheme = false;
+    private int mNavigationColor = 0;
+    private boolean mColorizeNavigationBar = false;
 
     class WeatherObserver extends ContentObserver {
         WeatherObserver(Handler handler) {
@@ -162,36 +166,23 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void updateTheme() {
-        int themeResId = 0;
-        mCustomizeColors = ThemeColorHelper.customizeColors(this);
-        mDefaultPrimaryColor = getColor(R.color.theme_primary);
-        int statusBarColor = ThemeColorHelper.getStatusBarBackgroundColor(this, mDefaultPrimaryColor);
-        mPrimaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
-        int navigationColor = ThemeColorHelper.getNavigationBarBackgroundColor(this, mDefaultPrimaryColor);
-        mColorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
+        mDefaultPrimaryColor = getColor(com.android.internal.R.color.primary_color_darkkat);
+        mThemeResId = ThemeHelper.getDKThemeResId(this);
+        mThemeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
         mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
-        mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
-        boolean isBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
-        boolean isWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        mStatusBarColor = ThemeColorHelper.getStatusBarBackgroundColor(this, mDefaultPrimaryColor);
+        mPrimaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        mCustomizeColors = ThemeColorHelper.customizeColors(this);
+        mIsBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
+        mIsWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        mNavigationColor = ThemeColorHelper.getNavigationBarBackgroundColor(this, mDefaultPrimaryColor);
+        mColorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
 
-        if (mLightActionBar && mLightNavigationBar) {
-            themeResId = mLightStatusBar
-                    ? R.style.AppTheme_LightStatusBar_LightNavigationBar
-                    : R.style.AppTheme_LightActionBar_LightNavigationBar;
-        } else if (mLightActionBar) {
-            themeResId = mLightStatusBar
-                    ? R.style.AppTheme_LightStatusBar
-                    : R.style.AppTheme_LightActionBar;
-        } else if (mLightNavigationBar) {
-            themeResId = R.style.AppTheme_LightNavigationBar;
-        } else {
-            themeResId = R.style.AppTheme;
+        if (mThemeResId > 0) {
+            setTheme(mThemeResId);
         }
 
-        setTheme(themeResId);
-
-        mThemeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
         if (mThemeOverlayAccentResId > 0) {
             getTheme().applyStyle(mThemeOverlayAccentResId, true);
         }
@@ -220,12 +211,12 @@ public class MainActivity extends BaseActivity implements
             getWindow().getDecorView().setSystemUiVisibility(newFlags);
         }
 
-        if (mCustomizeColors && !isBlackoutTheme && !isWhiteoutTheme) {
-            getWindow().setStatusBarColor(statusBarColor);
+        if (mCustomizeColors && !mIsBlackoutTheme && !mIsWhiteoutTheme) {
+            getWindow().setStatusBarColor(mStatusBarColor);
             getActionBar().setBackgroundDrawable(new ColorDrawable(mPrimaryColor));
         }
-        if (navigationColor != 0) {
-            getWindow().setNavigationBarColor(navigationColor);
+        if (mNavigationColor != 0) {
+            getWindow().setNavigationBarColor(mNavigationColor);
         }
     }
 
@@ -298,21 +289,19 @@ public class MainActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
-        boolean customizeColors = ThemeColorHelper.customizeColors(this);
-        int primaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
-        boolean colorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
-        boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
-        boolean lightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
-        boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
         int themeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
+        boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
+        boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+        int primaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        boolean customizeColors = ThemeColorHelper.customizeColors(this);
+        boolean colorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
 
         if (mThemeOverlayAccentResId != themeOverlayAccentResId
-                || mCustomizeColors != customizeColors
-                || mPrimaryColor != primaryColor
-                || mColorizeNavigationBar != colorizeNavigationBar
                 || mLightStatusBar != lightStatusBar
-                || mLightActionBar != lightActionBar
-                || mLightNavigationBar != lightNavigationBar) {
+                || mLightNavigationBar != lightNavigationBar
+                || mPrimaryColor != primaryColor
+                || mCustomizeColors != customizeColors
+                || mColorizeNavigationBar != colorizeNavigationBar) {
             recreate();
         } else {
             mWeatherObserver.observe();

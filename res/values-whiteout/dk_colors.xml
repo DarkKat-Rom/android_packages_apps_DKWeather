@@ -16,5 +16,5 @@
 <resources>
 
     <!-- Theme.Material.Light (Whiteout version) -->
-    <color name="bottom_navigation_selected_item_text_icon_color">@color/black</color>
+    <color name="bottom_navigation_selected_item_text_icon_color">@android:color/black</color>
 </resources>
